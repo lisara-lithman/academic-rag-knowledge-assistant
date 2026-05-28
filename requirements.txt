@@ -1,0 +1,16 @@
+# Vector Database & Embeddings
+chromadb
+sentence-transformers
+
+# API Clients
+groq
+google-genai
+openai
+
+# Document Parsing & Helpers
+pypdf
+tenacity
+pydantic
+
+# User Interface
+gradio
