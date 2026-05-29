@@ -1,13 +1,11 @@
 import os
 import gradio as gr
-import uuid
 from dotenv import load_dotenv
 from google.genai import types
 from retrieval import search_pipeline, get_llm_client
 
 load_dotenv()
 
-# ── Custom CSS ────────────────────────────────────────────────────────────────
 custom_css = """
 .gradio-container {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
@@ -21,12 +19,6 @@ h1 {
 }
 """
 
-# ── Per-session chunk store keyed by a stable UUID ───────────────────────────
-# gr.State holds the UUID; this dict holds the actual chunks.
-_chunk_store: dict = {}
-
-
-# ── Answer generation ─────────────────────────────────────────────────────────
 def generate_grounded_answer(query, context_chunks, history=None, is_refinement=False):
     client, provider = get_llm_client()
 
@@ -46,7 +38,6 @@ def generate_grounded_answer(query, context_chunks, history=None, is_refinement=
         "4. Do NOT mention file names or page numbers inside your answer.\n"
         "5. If asked for a diagram, use Mermaid.js (```mermaid blocks) or ASCII art."
     )
-
     if is_refinement:
         system_prompt += (
             "\n\nIMPORTANT: The student wants you to refine or shorten the previous answer. "
@@ -66,12 +57,10 @@ def generate_grounded_answer(query, context_chunks, history=None, is_refinement=
                 if u: messages.append({"role": "user",      "content": u})
                 if b: messages.append({"role": "assistant", "content": b})
         messages.append({"role": "user", "content": user_prompt})
-        completion = client.chat.completions.create(
-            model="llama-3.1-8b-instant",
-            messages=messages,
-            temperature=0.2
+        r = client.chat.completions.create(
+            model="llama-3.1-8b-instant", messages=messages, temperature=0.2
         )
-        return completion.choices[0].message.content.strip()
+        return r.choices[0].message.content.strip()
 
     elif provider == "gemini":
         contents = []
@@ -80,57 +69,38 @@ def generate_grounded_answer(query, context_chunks, history=None, is_refinement=
                 if u: contents.append(types.Content(role="user",  parts=[types.Part.from_text(text=u)]))
                 if b: contents.append(types.Content(role="model", parts=[types.Part.from_text(text=b)]))
         contents.append(types.Content(role="user", parts=[types.Part.from_text(text=user_prompt)]))
-        config = types.GenerateContentConfig(system_instruction=system_prompt, temperature=0.2)
-        response = client.models.generate_content(
-            model='gemini-2.5-flash', contents=contents, config=config
-        )
-        return response.text.strip()
+        cfg = types.GenerateContentConfig(system_instruction=system_prompt, temperature=0.2)
+        r = client.models.generate_content(model='gemini-2.5-flash', contents=contents, config=cfg)
+        return r.text.strip()
 
     return "Error: unknown provider."
 
 
-# ── Gradio handlers ───────────────────────────────────────────────────────────
-def user(user_message, history):
-    return "", history + [[user_message, None]]
+def respond(user_message, history, last_chunks):
+    if not user_message.strip():
+        return "", history, "<p style='color:#64748b;font-style:italic;'>Ask a question to view slides and citations.</p>", last_chunks
 
-
-def bot(history, session_id):
-    """Run RAG pipeline. session_id (gr.State UUID) is stable per browser tab."""
-    if not history:
-        return history, "<p style='color:gray;'>Ask a question to see the references.</p>", session_id
-
-    user_message = history[-1][0]
-
-    # ── Retrieval ─────────────────────────────────────────────────────────────
     try:
-        decision, _, new_chunks = search_pipeline(user_message, history=history[:-1])
+        decision, _, new_chunks = search_pipeline(user_message, history=history)
     except Exception as e:
         print(f"[ERROR] search_pipeline: {e}")
-        history[-1][1] = f"⚠️ Retrieval error: {e}"
-        return history, "<p style='color:red;'>Retrieval failed.</p>", session_id
+        history.append((user_message, f"⚠️ Retrieval error: {e}"))
+        return "", history, "<p style='color:red;'>Retrieval failed.</p>", last_chunks
 
-    # Keep chunks across turns using the stable session UUID
     if new_chunks:
-        _chunk_store[session_id] = new_chunks
         chunks = new_chunks
     else:
-        chunks = _chunk_store.get(session_id, [])
+        chunks = last_chunks
 
-    # ── Answer ────────────────────────────────────────────────────────────────
     is_refinement = (decision == "REFINE")
     try:
-        answer = generate_grounded_answer(
-            user_message, chunks,
-            history=history[:-1],
-            is_refinement=is_refinement
-        )
+        answer = generate_grounded_answer(user_message, chunks, history=history, is_refinement=is_refinement)
     except Exception as e:
         print(f"[ERROR] generate_grounded_answer: {e}")
         answer = f"⚠️ Answer generation error: {e}"
 
-    history[-1][1] = answer
+    history.append((user_message, answer))
 
-    # ── Sources panel ─────────────────────────────────────────────────────────
     if not chunks:
         sources_html = "<p style='color:#64748b;font-style:italic;'>No reference slides found for this query.</p>"
     else:
@@ -150,16 +120,9 @@ def bot(history, session_id):
             </div>
             """
 
-    return history, sources_html, session_id
+    return "", history, sources_html, chunks
 
 
-def clear_chat(session_id):
-    _chunk_store.pop(session_id, None)
-    placeholder = "<p style='color:#64748b;font-style:italic;'>Ask a question to view slides and page citations.</p>"
-    return [], placeholder, session_id
-
-
-# ── Gradio UI ─────────────────────────────────────────────────────────────────
 with gr.Blocks(
     theme=gr.themes.Soft(primary_hue="blue", secondary_hue="indigo"),
     css=custom_css
@@ -175,12 +138,9 @@ with gr.Blocks(
         </div>
     """)
 
-    # Stable UUID per browser session — generated once when the page loads
-    session_id = gr.State(lambda: str(uuid.uuid4()))
+    last_chunks = gr.State([])
 
     with gr.Row(equal_height=True):
-
-        # ── Left: chat ────────────────────────────────────────────────────────
         with gr.Column(scale=3):
             chatbot = gr.Chatbot(height=520, show_label=False)
             with gr.Row():
@@ -192,30 +152,21 @@ with gr.Blocks(
                 submit_btn = gr.Button("Ask", variant="primary", scale=1)
             clear_btn = gr.Button("🗑️ Clear Chat", variant="secondary", size="sm")
 
-        # ── Right: sources ────────────────────────────────────────────────────
         with gr.Column(scale=1):
             sources_panel = gr.HTML(
                 value="<p style='color:#64748b;font-style:italic;'>Ask a question to view the slides and page citations used to formulate the response.</p>"
             )
 
-    # ── Event wiring ──────────────────────────────────────────────────────────
-    # Step 1: append user message (fast, no queue needed)
-    # Step 2: run RAG pipeline (queued so only one runs at a time)
-    msg.submit(
-        user, [msg, chatbot], [msg, chatbot], queue=False
-    ).then(
-        bot, [chatbot, session_id], [chatbot, sources_panel, session_id]
-    )
+    inputs  = [msg, chatbot, last_chunks]
+    outputs = [msg, chatbot, sources_panel, last_chunks]
 
-    submit_btn.click(
-        user, [msg, chatbot], [msg, chatbot], queue=False
-    ).then(
-        bot, [chatbot, session_id], [chatbot, sources_panel, session_id]
-    )
-
-    clear_btn.click(
-        clear_chat, [session_id], [chatbot, sources_panel, session_id], queue=False
-    )
+    msg.submit(respond, inputs, outputs)
+    submit_btn.click(respond, inputs, outputs)
+    
+    def clear_chat():
+        return "", [], "<p style='color:#64748b;font-style:italic;'>Ask a question to view slides and page citations.</p>", []
+        
+    clear_btn.click(clear_chat, None, outputs, queue=False)
 
 
 if __name__ == "__main__":

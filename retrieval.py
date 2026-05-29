@@ -128,6 +128,10 @@ def rewrite_query(query, history=None):
         if decision not in ["SEARCH", "REFINE", "CHAT"]:
             decision = "SEARCH"
 
+        # If there's no history, we cannot refine a previous answer
+        if not history:
+            decision = "SEARCH"
+
         print(f"User Input: '{query}' -> Decision: {decision} | Rewritten: '{rewritten}'")
         return decision, rewritten
 
