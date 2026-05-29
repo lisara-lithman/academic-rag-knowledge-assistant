@@ -15,4 +15,4 @@ pydantic
 # User Interface
 gradio
 plotly
-
+pandas
