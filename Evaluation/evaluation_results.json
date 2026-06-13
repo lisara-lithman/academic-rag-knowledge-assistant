@@ -1,0 +1,713 @@
+[
+  {
+    "query": "What is the difference between preemptive and non-preemptive CPU scheduling?",
+    "gold_standard_answer": "In preemptive scheduling, the execution of a running process can be suspended at any point by the operating system to allocate the CPU to another process (e.g., when a higher-priority process becomes ready). In non-preemptive scheduling, once a process is allocated the CPU, it keeps the CPU and cannot be suspended until it completes its entire execution or voluntarily relinquishes control (such as by switching to a waiting state).",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 5
+      }
+    ],
+    "pipeline_output": {
+      "decision": "SEARCH",
+      "rewritten_query": "preemptive vs non-preemptive CPU scheduling algorithms characteristics advantages disadvantages examples",
+      "retrieved_chunks": [
+        {
+          "id": "OSSA_Lecture_5.pdf_p5_c0",
+          "source": "OSSA_Lecture_5.pdf",
+          "page": 5,
+          "rerank_score": 9.044571876525879,
+          "text_snippet": "Preemptive and Non-preemptive Scheduling Preemptive: when a process is in the CPU, the execution can be suspended at any point. Non-preemptive: when a..."
+        },
+        {
+          "id": "OSSA_Tutorial_5.pdf_p1_c0",
+          "source": "OSSA_Tutorial_5.pdf",
+          "page": 1,
+          "rerank_score": 6.420073986053467,
+          "text_snippet": "IT2031 – Operating Systems and System Administration Department of Information Technology, Faculty of Computing Year 2 semester 2 (2026) Tutorial 5 1...."
+        },
+        {
+          "id": "OSSA_Lecture_5.pdf_p16_c0",
+          "source": "OSSA_Lecture_5.pdf",
+          "page": 16,
+          "rerank_score": 5.231228351593018,
+          "text_snippet": "Priority Scheduling A priority number (integer) is associated with each process The CPU is allocated to the process with the highest priority (smalles..."
+        },
+        {
+          "id": "Mid Revision.pdf_p2_c0",
+          "source": "Mid Revision.pdf",
+          "page": 2,
+          "rerank_score": 4.7066802978515625,
+          "text_snippet": "18. What is the difference between preemptive and non-preemptive scheduling? 19. Why is shared memory faster than message passing? 20. What is a zombi..."
+        }
+      ],
+      "generated_answer": "**Preemptive and Non-preemptive CPU Scheduling**\n\nAccording to the module materials, the main difference between preemptive and non-preemptive CPU scheduling is:\n\n* **Preemptive Scheduling**: When a process is in the CPU, the execution can be suspended at any point.\n* **Non-preemptive Scheduling**: When a process is in the CPU, the execution cannot be suspended until it completes the entire execution.\n\nThis difference highlights the key characteristic of preemptive scheduling, which allows the operating system to interrupt a running process and allocate the CPU to a higher-priority process. In contrast, non-preemptive scheduling allows a process to run until it completes its execution, without interruption."
+    }
+  },
+  {
+    "query": "What are the key functions of a dispatcher in CPU scheduling, and what is dispatch latency?",
+    "gold_standard_answer": "The dispatcher is a module that transfers control of the CPU from one process to another. Its key functions are: (1) Performing context switches (saving the state of the old process and loading the state of the new one), (2) Switching the CPU to user mode, and (3) Restarting the selected user program at its proper location. Dispatch latency is the time it takes for the dispatcher to stop one process and start another running.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 7
+      }
+    ],
+    "pipeline_output": {
+      "decision": "SEARCH",
+      "rewritten_query": "CPU dispatcher functions, dispatch latency, CPU scheduling algorithms, dispatcher role in CPU scheduling, dispatch latency definition, CPU scheduling performance metrics",
+      "retrieved_chunks": [
+        {
+          "id": "OSSA_Lecture_5.pdf_p7_c0",
+          "source": "OSSA_Lecture_5.pdf",
+          "page": 7,
+          "rerank_score": 9.069160461425781,
+          "text_snippet": "Dispatcher The dispatcher is a module that transfers control of the CPU from one process to another. The key functions are; Perform the context switch..."
+        },
+        {
+          "id": "OSSA_Tutorial_5.pdf_p1_c0",
+          "source": "OSSA_Tutorial_5.pdf",
+          "page": 1,
+          "rerank_score": 3.594386577606201,
+          "text_snippet": "IT2031 – Operating Systems and System Administration Department of Information Technology, Faculty of Computing Year 2 semester 2 (2026) Tutorial 5 1...."
+        },
+        {
+          "id": "OSSA_Lecture_5.pdf_p6_c0",
+          "source": "OSSA_Lecture_5.pdf",
+          "page": 6,
+          "rerank_score": 0.45992445945739746,
+          "text_snippet": "CPU Scheduling Short-term scheduler/ CPU scheduler selects the processes (PCBs) in the ready queue and allocates the CPU. CPU scheduling decisions may..."
+        },
+        {
+          "id": "OSSA_Lecture_3.pdf_p13_c0",
+          "source": "OSSA_Lecture_3.pdf",
+          "page": 13,
+          "rerank_score": -1.263608694076538,
+          "text_snippet": "Process Scheduling There are schedulers to control the process execution in the system. Schedulers in multiprogramming environment maximizes CPU use a..."
+        }
+      ],
+      "generated_answer": "**Key Functions of a Dispatcher:**\n\nThe key functions of a dispatcher in CPU scheduling are:\n\n* **Perform the context switch**: This involves switching the CPU from one process to another.\n* **Switch to user mode**: This involves switching the CPU from kernel mode to user mode.\n* **Restart the new user program**: This involves restarting the new process that has been selected by the dispatcher.\n\n**Dispatch Latency:**\n\n* **Dispatch latency** is the time it takes for the dispatcher to stop one process and start another to run.\n* It is an important factor in CPU scheduling as it affects the overall performance of the system.\n\nIn summary, the dispatcher plays a crucial role in CPU scheduling by performing context switches, switching between modes, and restarting new processes. Dispatch latency is a critical factor that affects the performance of the system."
+    }
+  },
+  {
+    "query": "How does the Operating System distinguish between protection and security?",
+    "gold_standard_answer": "The operating system distinguishes between protection and security based on the source of interference. Protection involves guarding a user's data and programs against unauthorized interference by other *authorized users* of the system. Security, on the other hand, involves guarding a user's data and programs against interference by *external entities* (such as unauthorized external persons or hackers).",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_6.pdf",
+        "page": 4
+      }
+    ],
+    "pipeline_output": {
+      "decision": "SEARCH",
+      "rewritten_query": "Operating System protection vs security",
+      "retrieved_chunks": [
+        {
+          "id": "OSSA_Lecture_6.pdf_p4_c0",
+          "source": "OSSA_Lecture_6.pdf",
+          "page": 4,
+          "rerank_score": 8.63757610321045,
+          "text_snippet": "Protection and Security Operating System uses two sets of techniques to counter threats to information namely; Protection- It involves guarding a user..."
+        },
+        {
+          "id": "OSSA_Lecture_6.pdf_p5_c0",
+          "source": "OSSA_Lecture_6.pdf",
+          "page": 5,
+          "rerank_score": 2.5538761615753174,
+          "text_snippet": "Facets to Protection of Information There are two facets to protection of information Secrecy: implies that only authorized users should be able to ac..."
+        },
+        {
+          "id": "OSSA_Lecture_6.pdf_p2_c0",
+          "source": "OSSA_Lecture_6.pdf",
+          "page": 2,
+          "rerank_score": 0.00038202106952667236,
+          "text_snippet": "Lecture 06 Protection and Security of the Operating System Year 02 and Semester 02 2 / 29..."
+        },
+        {
+          "id": "OSSA_Lecture_6.pdf_p6_c0",
+          "source": "OSSA_Lecture_6.pdf",
+          "page": 6,
+          "rerank_score": -1.0322619676589966,
+          "text_snippet": "Security and Protection: Policies and Mechanisms Security Policy: Specify whether a person can become a user of the system. Mechanism: Add or delete u..."
+        }
+      ],
+      "generated_answer": "**Distinguishing Between Protection and Security**\n\nAccording to the module materials, the Operating System uses two sets of techniques to counter threats to information:\n\n* **Protection**: Guards a user's data and programs against inference by other authorized users of the system.\n* **Security**: Guards a user's data and programs against interference by external entities, such as unauthorized persons.\n\n**Key Differences:**\n\n* **Protection** focuses on preventing authorized users from accessing sensitive information.\n* **Security** focuses on preventing external entities from accessing or interfering with sensitive information.\n\nIn summary, the Operating System distinguishes between protection and security by:\n\n* Protection: Preventing authorized users from accessing sensitive information.\n* Security: Preventing external entities from accessing or interfering with sensitive information."
+    }
+  },
+  {
+    "query": "Explain the difference between secrecy and privacy in information protection.",
+    "gold_standard_answer": "Secrecy implies that only authorized users should be able to access the information. Privacy implies that information should be used only for the specific purpose or purposes for which it is intended and shared. The operating system focuses on guaranteeing secrecy of information, leaving issues of privacy to the users and their programs.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_6.pdf",
+        "page": 5
+      }
+    ],
+    "pipeline_output": {
+      "decision": "SEARCH",
+      "rewritten_query": "Information protection, secrecy, privacy",
+      "retrieved_chunks": [
+        {
+          "id": "OSSA_Lecture_6.pdf_p5_c0",
+          "source": "OSSA_Lecture_6.pdf",
+          "page": 5,
+          "rerank_score": 7.229917526245117,
+          "text_snippet": "Facets to Protection of Information There are two facets to protection of information Secrecy: implies that only authorized users should be able to ac..."
+        },
+        {
+          "id": "OSSA_Lecture_6.pdf_p4_c0",
+          "source": "OSSA_Lecture_6.pdf",
+          "page": 4,
+          "rerank_score": 1.0298123359680176,
+          "text_snippet": "Protection and Security Operating System uses two sets of techniques to counter threats to information namely; Protection- It involves guarding a user..."
+        },
+        {
+          "id": "OSSA_Lecture_6.pdf_p12_c0",
+          "source": "OSSA_Lecture_6.pdf",
+          "page": 12,
+          "rerank_score": -1.5107312202453613,
+          "text_snippet": "Core Security Principles Confidentiality- The information is not disclosed to unauthorized individuals, entities and process. Eg: If someone sees my c..."
+        },
+        {
+          "id": "OSSA_Lecture_6.pdf_p7_c0",
+          "source": "OSSA_Lecture_6.pdf",
+          "page": 7,
+          "rerank_score": -6.796038627624512,
+          "text_snippet": "Security and Protection: Policies and Mechanisms Protection Policy: Specify whether a user can access a specific file. Mechanism: Set or change protec..."
+        }
+      ],
+      "generated_answer": "**Secrecy and Privacy in Information Protection**\n\nAccording to the module materials, there are two facets to protection of information:\n\n* **Secrecy**: implies that only authorized users should be able to access information.\n* **Privacy**: implies that information should be used only for the purpose(s) for which it is intended and shared.\n\nIn other words:\n\n* **Secrecy** focuses on controlling who can access information.\n* **Privacy** focuses on controlling how information is used and shared.\n\nThe Operating System primarily focuses on guaranteeing secrecy of information, leaving the issues of privacy to the users and their processes.\n\n**Key differences:**\n\n* Secrecy is about access control, while privacy is about usage and sharing control.\n* Secrecy is a more technical aspect, whereas privacy is more related to user behavior and intentions."
+    }
+  },
+  {
+    "query": "Why can concurrent access to shared data lead to data inconsistency, and how does the producer-consumer problem illustrate this?",
+    "gold_standard_answer": "Concurrent access to shared data can lead to data inconsistency because processes executing concurrently can interrupt each other's execution before shared variables are fully and correctly updated. This creates race conditions where the final data value depends on the exact execution order. In the producer-consumer problem, if a shared 'count' variable is updated by the producer (incrementing) and consumer (decrementing) concurrently, they may read out-of-date local copies of the counter. When they write their local values back, the counter ends up with an incorrect value rather than representing the true count.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 4
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 5
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 7
+      }
+    ],
+    "pipeline_output": {
+      "decision": "SEARCH",
+      "rewritten_query": "concurrent access shared data inconsistency producer-consumer problem synchronization multithreading data integrity",
+      "retrieved_chunks": [
+        {
+          "id": "OSSA_Lecture_7.pdf_p5_c0",
+          "source": "OSSA_Lecture_7.pdf",
+          "page": 5,
+          "rerank_score": 6.123103141784668,
+          "text_snippet": "Data Inconsistency due to Concurrency Illustration of the problem: Suppose that we wanted to provide a solution to the consumer-producer problem that ..."
+        },
+        {
+          "id": "OSSA_Lecture_7.pdf_p4_c0",
+          "source": "OSSA_Lecture_7.pdf",
+          "page": 4,
+          "rerank_score": 5.472099304199219,
+          "text_snippet": "Background Processes are executing concurrently while interrupting the executions of other processes. The concurrent access to shared data may result ..."
+        },
+        {
+          "id": "OSSA_Lecture_7.pdf_p8_c0",
+          "source": "OSSA_Lecture_7.pdf",
+          "page": 8,
+          "rerank_score": -1.0234156847000122,
+          "text_snippet": "Race Condition This is a situation where several processes access and manipulate the shared data concurrently. Then the outcome of the execution depen..."
+        },
+        {
+          "id": "OSSA_Lecture_7.pdf_p7_c0",
+          "source": "OSSA_Lecture_7.pdf",
+          "page": 7,
+          "rerank_score": -3.6486659049987793,
+          "text_snippet": "Producer – Consumer Illustration Assume the initial value of count is 5 and producer starts the execution. The producer increments count in its local ..."
+        }
+      ],
+      "generated_answer": "**Why Concurrent Access to Shared Data Leads to Data Inconsistency:**\n\n* Concurrent access to shared data can result in data inconsistencies due to the possibility of multiple processes accessing and manipulating the shared data at the same time.\n* This can lead to unpredictable outcomes, as the order in which the access takes place can affect the final result.\n\n**The Producer-Consumer Problem Illustrates Data Inconsistency:**\n\n* In the producer-consumer problem, a shared counter is used to keep track of the number of full buffers.\n* The producer increments the counter after producing a new buffer, while the consumer decrements the counter after consuming a buffer.\n* If the producer and consumer access the shared counter concurrently, the outcome of the execution can depend on the order in which they access the counter.\n* This can lead to data inconsistency, as shown in the illustration on Slide 4, where the consumer reads an incorrect value of the counter.\n\n**Example of Data Inconsistency:**\n\n* Suppose the initial value of the counter is 5.\n* The producer increments the counter to 6, but before the update is visible to the consumer, the consumer reads the counter and sees the old value of 5.\n* The consumer then proceeds to consume a buffer, decrementing the counter to 4.\n* However, the producer has already incremented the counter to 6, so the final value of the counter is 6, not 4.\n\n**Conclusion:**\n\n* Concurrent access to shared data can lead to data inconsistency due to the unpredictable nature of concurrent access.\n* The producer-consumer problem illustrates this issue, where the shared counter can have different values depending on the order in which the producer and consumer access it."
+    }
+  },
+  {
+    "query": "What are the four necessary conditions for a deadlock to occur in an operating system?",
+    "gold_standard_answer": "A deadlock can occur only if the following four conditions hold simultaneously in the system: (1) Mutual exclusion: only one process at a time can use a resource; (2) Hold and wait: a process holding at least one resource is waiting to acquire additional resources held by other processes; (3) No preemption: resources cannot be preempted and can only be released voluntarily by the process holding them; and (4) Circular wait: a closed chain of processes exists where each process holds resources needed by the next process in the chain.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_9.pdf",
+        "page": 6
+      },
+      {
+        "source": "OSSA_Lecture_9.pdf",
+        "page": 14
+      }
+    ],
+    "pipeline_output": {
+      "decision": "SEARCH",
+      "rewritten_query": "deadlock conditions operating system necessary requirements",
+      "retrieved_chunks": [
+        {
+          "id": "2017-oct.pdf_p5_c0",
+          "source": "2017-oct.pdf",
+          "page": 5,
+          "rerank_score": 7.083882808685303,
+          "text_snippet": "Question 4 (25 marks) a) List the four necessary conditions to have a deadlock in a system. (3 marks) b) Propose two solutions to prevent the deadlock..."
+        },
+        {
+          "id": "OSSA_Lecture_9.pdf_p14_c0",
+          "source": "OSSA_Lecture_9.pdf",
+          "page": 14,
+          "rerank_score": 4.461056709289551,
+          "text_snippet": "Deadlock Prevention Use a set of methods to ensure thatany oneof the four deadlock conditions cannot hold: 1 Deny mutual exclusion Processes are shari..."
+        },
+        {
+          "id": "OSSA_Lecture_9.pdf_p13_c0",
+          "source": "OSSA_Lecture_9.pdf",
+          "page": 13,
+          "rerank_score": 1.6381561756134033,
+          "text_snippet": "Three Methods for Handling Deadlock Use a protocol to ensure that the system will never reach deadlock Using deadlock prevention and/or deadlock avoid..."
+        },
+        {
+          "id": "OSSA_Lecture_9.pdf_p16_c0",
+          "source": "OSSA_Lecture_9.pdf",
+          "page": 16,
+          "rerank_score": -2.6865696907043457,
+          "text_snippet": "Deadlock Avoidance The deadlock-avoidance algorithm dynamically examines the resource-allocation state to ensure thatthere can never be a circular-wai..."
+        }
+      ],
+      "generated_answer": "**Four Necessary Conditions for a Deadlock to Occur:**\n\nAccording to the context materials, the four necessary conditions for a deadlock to occur in an operating system are not explicitly listed. However, we can infer that the conditions are related to the deadlock problem.\n\nFrom **Slide 1**, we know that the question is related to the deadlock problem, but the conditions are not explicitly mentioned.\n\nFrom **Slide 2**, we see that deadlock prevention involves ensuring that any one of the four deadlock conditions cannot hold. The conditions are listed as:\n\n1. Deny mutual exclusion\n2. Deny hold and wait\n3. (Conditions 3 and 4 are not explicitly mentioned)\n\nFrom **Slide 3**, we know that there are three methods for handling deadlock, but the conditions are not explicitly mentioned.\n\nFrom **Slide 4**, we see that deadlock avoidance involves dynamically examining the resource-allocation state to ensure that there can never be a circular-wait condition. However, the conditions are not explicitly mentioned.\n\n**Conclusion:**\nI cannot find the answer in the module materials."
+    }
+  },
+  {
+    "query": "In resource allocation graphs, what do request edges and assignment edges represent?",
+    "gold_standard_answer": "In a directed system resource-allocation graph, a request edge is a directed edge from a process to a resource type (Pi -> Rj), representing that process Pi has requested an instance of resource type Rj and is currently waiting for it. An assignment edge is a directed edge from a resource type to a process (Rj -> Pi), representing that an instance of resource type Rj has been allocated and assigned to process Pi.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_9.pdf",
+        "page": 7
+      },
+      {
+        "source": "OSSA_Lecture_9.pdf",
+        "page": 19
+      }
+    ],
+    "pipeline_output": {
+      "decision": "SEARCH",
+      "rewritten_query": "Resource allocation graphs, request edges, assignment edges",
+      "retrieved_chunks": [
+        {
+          "id": "OSSA_Lecture_9.pdf_p19_c0",
+          "source": "OSSA_Lecture_9.pdf",
+          "page": 19,
+          "rerank_score": 5.547764778137207,
+          "text_snippet": "Resource-Allocation Graph Algorithm Claim edgeP i →R j indicates that processP i mayrequest resource Rj. It is represented by a dashed line. Claim edg..."
+        },
+        {
+          "id": "OSSA_Lecture_9.pdf_p7_c0",
+          "source": "OSSA_Lecture_9.pdf",
+          "page": 7,
+          "rerank_score": 3.0353174209594727,
+          "text_snippet": "Deadlock Modelling Deadlocks can be described more precisely in terms of a directed graphG(V,E). This is calledSystem resource-allocation graph. Vis p..."
+        },
+        {
+          "id": "OSSA_Lecture_9.pdf_p20_c0",
+          "source": "OSSA_Lecture_9.pdf",
+          "page": 20,
+          "rerank_score": -0.468447744846344,
+          "text_snippet": "Example When a resource is released by a process, assignment edge converts to a claim edge Resources must be claimed a priori in the system Need a cyc..."
+        },
+        {
+          "id": "2014-June.pdf_p4_c0",
+          "source": "2014-June.pdf",
+          "page": 4,
+          "rerank_score": -1.3551808595657349,
+          "text_snippet": "00007 6) Once a deadlock is detected in a system, how does the system recover from the deadlock? Briefly explain your answer. 7) What does a cycle in ..."
+        }
+      ],
+      "generated_answer": "**Request Edges and Assignment Edges in Resource Allocation Graphs**\n\nAccording to the module materials, in a resource allocation graph, we have two types of edges:\n\n* **Request Edges**: A request edge is represented by a directed edge from a process to a resource type, denoted as `P i →R j`. This indicates that process `P i` may request an instance of resource `R j`.\n* **Assignment Edges**: An assignment edge is represented by a directed edge from a resource type to a process, denoted as `R j →P i`. This indicates that an instance of resource `R j` has been allocated to process `P i`.\n\nIn summary, request edges represent the potential resource requests of a process, while assignment edges represent the actual allocation of resources to processes."
+    }
+  },
+  {
+    "query": "What are the main attributes of a file managed by an operating system?",
+    "gold_standard_answer": "The main file attributes (metadata) used by the operating system to control and manage files include: (1) Name: the human-readable identifier; (2) Identifier: a unique internal ID; (3) Location: pointer to the file's storage device; (4) Size: the current size of the file; (5) Protection: access permissions (who can read/write/execute); and (6) Time & Date: creation, last modification, and last use timestamps.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_8.pdf",
+        "page": 6
+      }
+    ],
+    "pipeline_output": {
+      "decision": "SEARCH",
+      "rewritten_query": "operating system file management attributes",
+      "retrieved_chunks": [
+        {
+          "id": "OSSA_Lecture_8.pdf_p6_c0",
+          "source": "OSSA_Lecture_8.pdf",
+          "page": 6,
+          "rerank_score": 7.6840128898620605,
+          "text_snippet": "File Attributes ▪ Each file has associated metadata known as attributes. These help the operating system manage and control files effectively. ▪ Key a..."
+        },
+        {
+          "id": "OSSA_Lecture_8.pdf_p4_c0",
+          "source": "OSSA_Lecture_8.pdf",
+          "page": 4,
+          "rerank_score": 4.11199951171875,
+          "text_snippet": "File Concept ▪ A file system is a fundamental component of an operating system that manages how data is stored, organized, and retrieved from storage ..."
+        },
+        {
+          "id": "OSSA_Lecture_8.pdf_p5_c0",
+          "source": "OSSA_Lecture_8.pdf",
+          "page": 5,
+          "rerank_score": 1.5226142406463623,
+          "text_snippet": "File Concept ▪ A file is the smallest unit of logical storage in an operating system. ▪ It represents a collection of related information stored on se..."
+        },
+        {
+          "id": "OSSA_Lecture_1.pdf_p18_c0",
+          "source": "OSSA_Lecture_1.pdf",
+          "page": 18,
+          "rerank_score": 0.05466450750827789,
+          "text_snippet": "System programs or utilities Set of tools provided by the operating system to help users manage files, devices, and system settings easily. System pro..."
+        }
+      ],
+      "generated_answer": "**File Attributes Managed by an Operating System**\n\nAccording to the module materials, the main attributes of a file managed by an operating system are:\n\n* **Name**: A human-readable identifier\n* **Identifier**: A unique internal ID\n* **Location**: Where the file is stored\n* **Size**: The current file size\n* **Protection**: Access permissions\n* **Time & Date**: Creation and modification timestamps\n\nThese attributes are essential for security, tracking, and file organization."
+    }
+  },
+  {
+    "query": "What are the different process states in process management?",
+    "gold_standard_answer": "As a process executes, it moves through different states: (1) New: The process is in the process of being created; (2) Ready: The process is loaded in memory and waiting to be assigned to a CPU core; (3) Running: Instructions are currently being executed by the CPU; (4) Waiting: The process is waiting for some event to occur (e.g., I/O completion or signal); and (5) Terminated: The process has finished its execution.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_3.pdf",
+        "page": 8
+      }
+    ],
+    "pipeline_output": {
+      "decision": "SEARCH",
+      "rewritten_query": "process management process states, process lifecycle, process states in operating systems, process states in computer science, process states overview, process states explanation",
+      "retrieved_chunks": [
+        {
+          "id": "OSSA_Lecture_3.pdf_p8_c0",
+          "source": "OSSA_Lecture_3.pdf",
+          "page": 8,
+          "rerank_score": 4.18396520614624,
+          "text_snippet": "Process State As a process executes, it changes state new: The process is being created running: Instructions are being executed waiting: The process ..."
+        },
+        {
+          "id": "OSSA_Lecture_3.pdf_p3_c0",
+          "source": "OSSA_Lecture_3.pdf",
+          "page": 3,
+          "rerank_score": -0.04578148201107979,
+          "text_snippet": "Chapter 3: Processes Process Concept Process State Process Control Block Process Scheduling Operations of Processes Inter process Communication Year 0..."
+        },
+        {
+          "id": "OSSA_Lab_4.pdf_p1_c0",
+          "source": "OSSA_Lab_4.pdf",
+          "page": 1,
+          "rerank_score": -1.3566007614135742,
+          "text_snippet": "Faculty of Computing Year 2 Semester 2 (2026) IT2130 - Operating Systems and System Administration Lab Sheet 4 Objectives:In the end of this practical..."
+        },
+        {
+          "id": "OSSA_Lecture_3.pdf_p18_c0",
+          "source": "OSSA_Lecture_3.pdf",
+          "page": 18,
+          "rerank_score": -3.101839542388916,
+          "text_snippet": "Operations on Processes There are three main operations. Process Creation Process Termination Inter Process Communication Year 02 and Semester 02 18 /..."
+        }
+      ],
+      "generated_answer": "**Process States in Process Management**\n\nAccording to the module materials, a process can be in one of the following states:\n\n* **New**: The process is being created.\n* **Running**: Instructions are being executed.\n* **Waiting**: The process is waiting for some event to occur.\n* **Ready**: The process is waiting to be assigned to a processor.\n* **Terminated**: The process has finished execution.\n\nThese process states are fundamental to understanding how processes are managed in an operating system."
+    }
+  },
+  {
+    "query": "What is a Process Control Block (PCB) and what information does it store?",
+    "gold_standard_answer": "A Process Control Block (PCB) is an operating system data structure representing a process. It stores all information needed to manage and resume the process, including: process state (new, ready, etc.), the program counter (next instruction address), CPU registers, CPU scheduling information (like priorities), memory management information (page/segment tables), accounting information (CPU time used), and I/O status information (open files, assigned devices).",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_3.pdf",
+        "page": 9
+      },
+      {
+        "source": "OSSA_Lecture_3.pdf",
+        "page": 10
+      }
+    ],
+    "pipeline_output": {
+      "decision": "SEARCH",
+      "rewritten_query": "Process Control Block (PCB) definition, components, and stored information, including process ID, memory allocation, and scheduling details",
+      "retrieved_chunks": [
+        {
+          "id": "OSSA_Lecture_3.pdf_p9_c0",
+          "source": "OSSA_Lecture_3.pdf",
+          "page": 9,
+          "rerank_score": 8.904170989990234,
+          "text_snippet": "Process Control Block (PCB) Every process has a Process Control Block (PCB) to store the essential details about the process. When a program loads to ..."
+        },
+        {
+          "id": "OSSA_Lecture_3.pdf_p10_c0",
+          "source": "OSSA_Lecture_3.pdf",
+          "page": 10,
+          "rerank_score": 7.097986221313477,
+          "text_snippet": "Process Control Block (PCB) Each PCB contains: Process state– running, waiting, etc Process number(process ID) Program counter– location of instructio..."
+        },
+        {
+          "id": "OSSA_Lecture_8.pdf_p25_c0",
+          "source": "OSSA_Lecture_8.pdf",
+          "page": 25,
+          "rerank_score": -0.1360476016998291,
+          "text_snippet": "File Control Block (FCB) ▪ OS maintains FCB per file, which contains many details about the file • Typically, inode number, permissions, size, dates •..."
+        },
+        {
+          "id": "OSSA_Lecture_3.pdf_p3_c0",
+          "source": "OSSA_Lecture_3.pdf",
+          "page": 3,
+          "rerank_score": -2.0187997817993164,
+          "text_snippet": "Chapter 3: Processes Process Concept Process State Process Control Block Process Scheduling Operations of Processes Inter process Communication Year 0..."
+        }
+      ],
+      "generated_answer": "**Process Control Block (PCB)**\n\nA Process Control Block (PCB) is a data structure that stores essential details about a process. Every process has a PCB to manage its execution.\n\n**Information Stored in a PCB:**\n\n* **Process State**: The current state of the process, such as running, waiting, etc.\n* **Process Number (Process ID)**: A unique identifier for the process.\n* **Program Counter**: The location of the next instruction to be executed.\n* **CPU Registers**: The contents of all process-centric registers.\n* **CPU Scheduling Information**: Priorities, scheduling queue pointers, and other scheduling-related data.\n* **Memory-Management Information**: Details about the memory allocated to the process.\n* **Accounting Information**: CPU usage, clock time elapsed since start, time limits, and other accounting-related data.\n* **I/O Status Information**: Details about I/O devices allocated to the process and open files.\n\n**Location of PCB Memory**\n\nThe PCB gets its memory from the kernel memory area, while the program gets its memory from the user memory area."
+    }
+  },
+  {
+    "query": "What are the main hard disk scheduling algorithms used in operating systems?",
+    "gold_standard_answer": "The main hard disk scheduling algorithms are: (1) FCFS (First-Come, First-Served): requests are served in order; (2) SSTF (Shortest Seek Time First): selects the request closest to the current disk arm position; (3) SCAN: the disk arm moves from one end to the other, serving requests along the way, then reverses direction; (4) C-SCAN (Circular SCAN): moves the arm in one direction serving requests, then immediately returns to the start without serving requests on the return trip; (5) LOOK: similar to SCAN, but only goes as far as the last request in each direction; and (6) C-LOOK: similar to C-SCAN, but only goes as far as the last request in the direction of travel.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_10.pdf",
+        "page": 10
+      }
+    ],
+    "pipeline_output": {
+      "decision": "SEARCH",
+      "rewritten_query": "hard disk scheduling algorithms operating systems",
+      "retrieved_chunks": [
+        {
+          "id": "OSSA_Lecture_10.pdf_p7_c0",
+          "source": "OSSA_Lecture_10.pdf",
+          "page": 7,
+          "rerank_score": 6.652713775634766,
+          "text_snippet": "Disk Scheduling Disk scheduling is the method used by the operating system to decide the order in which disk read/write requests are serviced. The mai..."
+        },
+        {
+          "id": "OSSA_Lecture_10.pdf_p8_c0",
+          "source": "OSSA_Lecture_10.pdf",
+          "page": 8,
+          "rerank_score": 5.899664878845215,
+          "text_snippet": "Why Disk Scheduling In an operating system, multiple processes often request access to the disk at the same time. These requests are placed in aqueue,..."
+        },
+        {
+          "id": "OSSA_Lecture_10.pdf_p9_c0",
+          "source": "OSSA_Lecture_10.pdf",
+          "page": 9,
+          "rerank_score": 3.5279479026794434,
+          "text_snippet": "Disk Scheduling (Cont.) Note that drive controllers have small buffers and can manage a queue of I/O requests (of varying “depth”) Several algorithms ..."
+        },
+        {
+          "id": "OSSA_Lecture_10.pdf_p10_c0",
+          "source": "OSSA_Lecture_10.pdf",
+          "page": 10,
+          "rerank_score": 1.7985146045684814,
+          "text_snippet": "Disk Scheduling Algorithms FCFS Algorithm SSTF Algorithm SCAN Algorithm C-SCAN Algorithm LOOK Algorithm C-LOOK Algorithm Year 02 and Semester 02 10 / ..."
+        }
+      ],
+      "generated_answer": "**Disk Scheduling Algorithms**\n\nThe main hard disk scheduling algorithms used in operating systems are:\n\n* **FCFS (First-Come-First-Served) Algorithm**: \n    + This algorithm services disk I/O requests in the order they are received.\n    + It does not consider the location of the disk head, which can lead to inefficient disk access.\n* **SSTF (Shortest-Seek-Time-First) Algorithm**: \n    + This algorithm services the disk I/O request that requires the shortest seek time.\n    + It minimizes the movement of the disk head, reducing access time.\n* **SCAN Algorithm**: \n    + This algorithm moves the disk head in one direction, servicing all requests in that direction.\n    + It then reverses direction and services the remaining requests.\n* **C-SCAN Algorithm**: \n    + This algorithm is similar to the SCAN algorithm, but it completes a full scan of the disk before returning to the starting point.\n* **LOOK Algorithm**: \n    + This algorithm moves the disk head in one direction, but it only services requests until it reaches the end of the disk.\n    + It then returns to the starting point without completing a full scan.\n* **C-LOOK Algorithm**: \n    + This algorithm is similar to the LOOK algorithm, but it completes a full scan of the disk in both directions before returning to the starting point."
+    }
+  },
+  {
+    "query": "What is virtual memory and what are its primary advantages?",
+    "gold_standard_answer": "Virtual memory is a memory management technique that allows the execution of processes that are not completely loaded into main physical memory. Its primary advantages are: (1) Allowing programs to be larger than physical memory; (2) Increasing CPU utilization and the degree of multiprogramming by fitting more processes into physical memory; (3) Simplifying programming by providing a large, logical, and contiguous address space; and (4) Speeding up process loading since less physical memory needs to be loaded initially.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_11.pdf",
+        "page": 2
+      },
+      {
+        "source": "OSSA_Tutorial_11.pdf",
+        "page": 1
+      }
+    ],
+    "pipeline_output": {
+      "decision": "SEARCH",
+      "rewritten_query": "virtual memory definition advantages benefits computer science",
+      "retrieved_chunks": [
+        {
+          "id": "OSSA_Tutorial_11.pdf_p1_c2",
+          "source": "OSSA_Tutorial_11.pdf",
+          "page": 1,
+          "rerank_score": 7.217360973358154,
+          "text_snippet": "external fragmentation. 6. Virtual memory is a technique that allows the execution of processes that are not completely in memory. Virtual memory is i..."
+        },
+        {
+          "id": "2023-May.pdf_p4_c1",
+          "source": "2023-May.pdf",
+          "page": 4,
+          "rerank_score": 3.1341934204101562,
+          "text_snippet": "system with 2]9bytes of physical memory, 4096 pages of logical address space, and a page size of4KB. Answer the following. i. What is the difference b..."
+        },
+        {
+          "id": "2023-Nov-2.pdf_p5_c0",
+          "source": "2023-Nov-2.pdf",
+          "page": 5,
+          "rerank_score": 1.0205318927764893,
+          "text_snippet": "02079 c) Virtual memory is a technique that allows the execution of processes that are not completely in memory. i. What is a page fault? (2 Marks) ii..."
+        },
+        {
+          "id": "OSSA_Lecture_11.pdf_p4_c0",
+          "source": "OSSA_Lecture_11.pdf",
+          "page": 4,
+          "rerank_score": -2.8060364723205566,
+          "text_snippet": "Main Memory Memory is a large array of words or bytes, each with its own address. It is a repository of quickly accessible data shared by CPU and I/O ..."
+        }
+      ],
+      "generated_answer": "**Virtual Memory**\n\nVirtual memory is a technique that allows the execution of processes that are not completely in memory. It is implemented by taking part of the space from the hard disk.\n\n**Advantages of Virtual Memory**\n\nAccording to the context materials, the primary advantages of virtual memory are:\n\n* **Allowing the execution of processes that are not completely in memory**: This is the primary benefit of virtual memory, enabling processes to run even when they don't fit entirely in physical memory.\n* **Other advantages**: Although not explicitly stated in the provided context, we can infer that virtual memory also provides benefits such as:\n\t+ **Improved memory utilization**: By using hard disk space to supplement physical memory, virtual memory can help optimize memory usage.\n\t+ **Increased system flexibility**: Virtual memory enables systems to run multiple processes simultaneously, even when physical memory is limited.\n\n**Additional Information**\n\nAccording to Slide 2, the operating system takes the following actions when there is a page fault:\n\n1. **Page fault handling**: The operating system handles page faults by taking actions such as:\n\t+ **Page replacement**: Replacing a page in physical memory with a new page from the hard disk.\n\t+ **Page loading**: Loading the required page from the hard disk into physical memory.\n\nThese actions are essential for maintaining the integrity and efficiency of virtual memory."
+    }
+  },
+  {
+    "query": "Explain the concept of paging in memory management.",
+    "gold_standard_answer": "Paging is a memory management scheme that eliminates the need for contiguous allocation of physical memory. It works by dividing physical memory into fixed-size blocks called frames, and logical memory into blocks of the same size called pages. The operating system uses page tables to map logical pages to physical frames, allowing processes to be allocated physical memory wherever it is available, which avoids external fragmentation.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_11.pdf",
+        "page": 27
+      }
+    ],
+    "pipeline_output": {
+      "decision": "SEARCH",
+      "rewritten_query": "Paging in memory management",
+      "retrieved_chunks": [
+        {
+          "id": "OSSA_Lecture_11.pdf_p27_c0",
+          "source": "OSSA_Lecture_11.pdf",
+          "page": 27,
+          "rerank_score": 3.714664936065674,
+          "text_snippet": "Demand Paging Demand paging is a technique used in virtual memory where pages are loaded into RAM only when they are actually needed, rather than load..."
+        },
+        {
+          "id": "2015.pdf_p4_c0",
+          "source": "2015.pdf",
+          "page": 4,
+          "rerank_score": 2.0020227432250977,
+          "text_snippet": "Question 3(Memory Management) (22 marks) 1) Briefly describe following terms (2 marks) a) Dynamic Linking b) Swap in 2) Explain the difference between..."
+        },
+        {
+          "id": "2017-oct.pdf_p3_c0",
+          "source": "2017-oct.pdf",
+          "page": 3,
+          "rerank_score": 1.859416127204895,
+          "text_snippet": "1. List the main two problems in contiguous memory allocation. (2 marks) 11. If a new process has introduced into the system with the size of 600KB, b..."
+        },
+        {
+          "id": "OSSA_Lecture_11.pdf_p23_c0",
+          "source": "OSSA_Lecture_11.pdf",
+          "page": 23,
+          "rerank_score": -0.4869248867034912,
+          "text_snippet": "Paging Hardware With Associative Memory (TLB) Year 02 and Semester 02 23 / 41..."
+        }
+      ],
+      "generated_answer": "**Paging in Memory Management**\n\nPaging is a memory management technique used to manage virtual memory. It allows the operating system to divide the physical memory into fixed-size blocks called **pages**. Each process is divided into pages, and the operating system maps these pages to physical memory locations.\n\n**Key Characteristics of Paging:**\n\n* **Fixed-size pages**: Pages are of fixed size, usually a power of 2 (e.g., 4KB or 8KB).\n* **Virtual memory**: Each process has its own virtual memory, which is divided into pages.\n* **Page table**: A page table is used to map virtual pages to physical memory locations.\n\n**How Paging Works:**\n\n1. The operating system divides the physical memory into fixed-size pages.\n2. Each process is divided into pages, and a page table is created to map these pages to physical memory locations.\n3. When a process references a memory location, the operating system checks the page table to determine the physical memory location of the page.\n4. If the page is not in physical memory, the operating system loads it from disk into physical memory.\n\n**Paging Advantages:**\n\n* **Efficient use of physical memory**: Paging allows multiple processes to share the same physical memory.\n* **Improved memory protection**: Paging provides a mechanism for memory protection, as each process has its own virtual memory.\n\n**Paging in the Context of the Provided Slides:**\n\n* Slide 1 mentions demand paging, which is a technique used in virtual memory where pages are loaded into RAM only when they are actually needed.\n* Slide 3 discusses the main problems in contiguous memory allocation and how paging can be used to allocate memory for a new process.\n* Slide 4 discusses the use of a page table with associative memory (TLB) in paging hardware.\n\n**Paging in a Simple Paging System:**\n\n* Consider a simple paging system with 218 bytes of physical memory, 4096 pages of logical address space, and a page size of 8KB.\n* The physical address would require **log2(218) = 8** bits to represent.\n* The logical address would require **log2(4096) = 12** bits to represent.\n* The page table would have **4096** entries, one for each page of logical address space."
+    }
+  },
+  {
+    "query": "What is a critical section and what is the critical-section problem?",
+    "gold_standard_answer": "A critical section is a segment of code within cooperating processes where shared resources (such as common variables, files, or tables) are accessed and modified. The critical-section problem is to design a coordination protocol (like mutexes or semaphores) that ensures processes cooperate safely, satisfying three requirements: (1) Mutual exclusion: only one process executes in its critical section at a time; (2) Progress: if no process is in its critical section, only processes wishing to enter can participate in deciding which enters next; and (3) Bounded waiting: there is a limit on the number of times other processes can enter their critical sections before a waiting process is granted access.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 9
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 10
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 11
+      }
+    ],
+    "pipeline_output": {
+      "decision": "SEARCH",
+      "rewritten_query": "critical section definition critical-section problem synchronization concurrency control concurrent programming",
+      "retrieved_chunks": [
+        {
+          "id": "OSSA_Lecture_7.pdf_p11_c0",
+          "source": "OSSA_Lecture_7.pdf",
+          "page": 11,
+          "rerank_score": 9.15608024597168,
+          "text_snippet": "Critical Section Problem Consider a system withnprocesses{P 0,P 1, . . . ,Pn−1}, where each process has a critical section. If more than one process e..."
+        },
+        {
+          "id": "OSSA_Lecture_7.pdf_p9_c0",
+          "source": "OSSA_Lecture_7.pdf",
+          "page": 9,
+          "rerank_score": 8.08036994934082,
+          "text_snippet": "Critical Section of a Process The critical section of a process is a segment of code which the shared data is getting changed. The shared data include..."
+        },
+        {
+          "id": "OSSA_Lecture_7.pdf_p10_c0",
+          "source": "OSSA_Lecture_7.pdf",
+          "page": 10,
+          "rerank_score": 6.071741104125977,
+          "text_snippet": "Critical Section Problem Each process must ask permission to enter critical section in entry section, may follow critical section with exit section, t..."
+        },
+        {
+          "id": "OSSA_Tutorial_7.pdf_p1_c0",
+          "source": "OSSA_Tutorial_7.pdf",
+          "page": 1,
+          "rerank_score": 5.958545207977295,
+          "text_snippet": "IT2031 – Operating Systems and System Administration Department of Information Technology, Faculty of Computing Year 2 semester 2 (2026) Tutorial 7 A ..."
+        }
+      ],
+      "generated_answer": "**Critical Section and Critical-Section Problem**\n\nA **critical section** is a segment of code where shared data is being changed. This shared data includes common variables, shared buffers, shared tables, shared files, etc.\n\nThe **critical-section problem** occurs when more than one process executes its critical section at the same time, leading to concurrent access and modification of shared data. This situation can result in **data inconsistency** if not handled properly.\n\nIn other words, the critical-section problem is a situation where multiple processes try to access and modify shared data simultaneously, potentially causing errors and inconsistencies.\n\n**Key Points:**\n\n* Critical section: a segment of code where shared data is being changed\n* Critical-section problem: concurrent access and modification of shared data by multiple processes\n* Data inconsistency: potential result of not handling the critical-section problem properly"
+    }
+  },
+  {
+    "query": "How does a thread differ from a process in thread management?",
+    "gold_standard_answer": "A process is an isolated, executing program with its own dedicated memory space, resources, and execution environment. In contrast, a thread is a basic unit of CPU utilization (a 'lightweight process') running *within* a process. While processes are isolated from one another, multiple threads belonging to the same process share its code section, data section, and operating system resources (like open files). However, each thread retains its own unique register set, program counter, and stack.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_4.pdf",
+        "page": 4
+      },
+      {
+        "source": "OSSA_Lecture_4.pdf",
+        "page": 6
+      }
+    ],
+    "pipeline_output": {
+      "decision": "SEARCH",
+      "rewritten_query": "Thread vs Process in Thread Management",
+      "retrieved_chunks": [
+        {
+          "id": "OSSA_Lecture_4.pdf_p4_c0",
+          "source": "OSSA_Lecture_4.pdf",
+          "page": 4,
+          "rerank_score": 4.105260848999023,
+          "text_snippet": "Introduction to Threads Threads run within processes and are generally invisible from outside the processes. A thread represents a single, independent..."
+        },
+        {
+          "id": "OSSA_Tutorial_4.pdf_p1_c0",
+          "source": "OSSA_Tutorial_4.pdf",
+          "page": 1,
+          "rerank_score": 3.635298490524292,
+          "text_snippet": "1 IT2031 – Operating Systems and System Administration Department of Information Technology, Faculty of Computing Year 2 semester 2 (2026) Tutorial 4 ..."
+        },
+        {
+          "id": "OSSA_Lecture_4.pdf_p6_c0",
+          "source": "OSSA_Lecture_4.pdf",
+          "page": 6,
+          "rerank_score": 1.5831959247589111,
+          "text_snippet": "Introduction to Threads Threads can be in one of several states: ready, blocked, running, or terminated. In a uniprocessor system, only one thread at ..."
+        },
+        {
+          "id": "OSSA_Lecture_4.pdf_p9_c0",
+          "source": "OSSA_Lecture_4.pdf",
+          "page": 9,
+          "rerank_score": 0.51848304271698,
+          "text_snippet": "Benefits of Threads Responsiveness– may allow continued execution if part of process is blocked, especially important for user interfaces Resource Sha..."
+        }
+      ],
+      "generated_answer": "**Thread vs Process: Key Differences**\n\nBased on the provided context materials, here are the key differences between a thread and a process in thread management:\n\n* **Invisibility**: Threads run within processes and are generally invisible from outside the processes.\n* **Execution Stream**: A thread represents a single, independent stream of execution within a process/application.\n* **Concurrency**: Most modern applications are multithreaded, allowing a single process to have multiple threads running concurrently.\n* **Kernel Management**: Kernels are generally multithreaded.\n\n**Key Points to Note:**\n\n* A thread is a part of a process, whereas a process is a separate entity.\n* Threads share resources of a process, making it easier to manage and communicate between them.\n* Threads can be created and managed independently within a process, allowing for more efficient use of system resources.\n\n**Thread States:**\n\n* A thread can be in one of several states: ready, blocked, running, or terminated.\n* In a uniprocessor system, only one thread at a time is running.\n* On a multiprocessor, different threads may execute on different processors.\n\n**Thread Creation and Management:**\n\n* A thread can create child threads.\n* If one thread is blocked, another thread can run.\n* Each thread has its own PC and Stack, but all threads can access every address in the process."
+    }
+  }
+]

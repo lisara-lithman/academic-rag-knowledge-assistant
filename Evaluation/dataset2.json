@@ -1,0 +1,188 @@
+[
+  {
+    "query": "What is the difference between preemptive and non-preemptive CPU scheduling?",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 5
+      }
+    ],
+    "gold_standard_answer": "In preemptive scheduling, the execution of a running process can be suspended at any point by the operating system to allocate the CPU to another process (e.g., when a higher-priority process becomes ready). In non-preemptive scheduling, once a process is allocated the CPU, it keeps the CPU and cannot be suspended until it completes its entire execution or voluntarily relinquishes control (such as by switching to a waiting state)."
+  },
+  {
+    "query": "What are the key functions of a dispatcher in CPU scheduling, and what is dispatch latency?",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 7
+      }
+    ],
+    "gold_standard_answer": "The dispatcher is a module that transfers control of the CPU from one process to another. Its key functions are: (1) Performing context switches (saving the state of the old process and loading the state of the new one), (2) Switching the CPU to user mode, and (3) Restarting the selected user program at its proper location. Dispatch latency is the time it takes for the dispatcher to stop one process and start another running."
+  },
+  {
+    "query": "How does the Operating System distinguish between protection and security?",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_6.pdf",
+        "page": 4
+      }
+    ],
+    "gold_standard_answer": "The operating system distinguishes between protection and security based on the source of interference. Protection involves guarding a user's data and programs against unauthorized interference by other *authorized users* of the system. Security, on the other hand, involves guarding a user's data and programs against interference by *external entities* (such as unauthorized external persons or hackers)."
+  },
+  {
+    "query": "Explain the difference between secrecy and privacy in information protection.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_6.pdf",
+        "page": 5
+      }
+    ],
+    "gold_standard_answer": "Secrecy implies that only authorized users should be able to access the information. Privacy implies that information should be used only for the specific purpose or purposes for which it is intended and shared. The operating system focuses on guaranteeing secrecy of information, leaving issues of privacy to the users and their programs."
+  },
+  {
+    "query": "Why can concurrent access to shared data lead to data inconsistency, and how does the producer-consumer problem illustrate this?",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 4
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 5
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 7
+      }
+    ],
+    "gold_standard_answer": "Concurrent access to shared data can lead to data inconsistency because processes executing concurrently can interrupt each other's execution before shared variables are fully and correctly updated. This creates race conditions where the final data value depends on the exact execution order. In the producer-consumer problem, if a shared 'count' variable is updated by the producer (incrementing) and consumer (decrementing) concurrently, they may read out-of-date local copies of the counter. When they write their local values back, the counter ends up with an incorrect value rather than representing the true count."
+  },
+  {
+    "query": "What are the four necessary conditions for a deadlock to occur in an operating system?",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_9.pdf",
+        "page": 6
+      },
+      {
+        "source": "OSSA_Lecture_9.pdf",
+        "page": 14
+      }
+    ],
+    "gold_standard_answer": "A deadlock can occur only if the following four conditions hold simultaneously in the system: (1) Mutual exclusion: only one process at a time can use a resource; (2) Hold and wait: a process holding at least one resource is waiting to acquire additional resources held by other processes; (3) No preemption: resources cannot be preempted and can only be released voluntarily by the process holding them; and (4) Circular wait: a closed chain of processes exists where each process holds resources needed by the next process in the chain."
+  },
+  {
+    "query": "In resource allocation graphs, what do request edges and assignment edges represent?",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_9.pdf",
+        "page": 7
+      },
+      {
+        "source": "OSSA_Lecture_9.pdf",
+        "page": 19
+      }
+    ],
+    "gold_standard_answer": "In a directed system resource-allocation graph, a request edge is a directed edge from a process to a resource type (Pi -> Rj), representing that process Pi has requested an instance of resource type Rj and is currently waiting for it. An assignment edge is a directed edge from a resource type to a process (Rj -> Pi), representing that an instance of resource type Rj has been allocated and assigned to process Pi."
+  },
+  {
+    "query": "What are the main attributes of a file managed by an operating system?",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_8.pdf",
+        "page": 6
+      }
+    ],
+    "gold_standard_answer": "The main file attributes (metadata) used by the operating system to control and manage files include: (1) Name: the human-readable identifier; (2) Identifier: a unique internal ID; (3) Location: pointer to the file's storage device; (4) Size: the current size of the file; (5) Protection: access permissions (who can read/write/execute); and (6) Time & Date: creation, last modification, and last use timestamps."
+  },
+  {
+    "query": "What are the different process states in process management?",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_3.pdf",
+        "page": 8
+      }
+    ],
+    "gold_standard_answer": "As a process executes, it moves through different states: (1) New: The process is in the process of being created; (2) Ready: The process is loaded in memory and waiting to be assigned to a CPU core; (3) Running: Instructions are currently being executed by the CPU; (4) Waiting: The process is waiting for some event to occur (e.g., I/O completion or signal); and (5) Terminated: The process has finished its execution."
+  },
+  {
+    "query": "What is a Process Control Block (PCB) and what information does it store?",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_3.pdf",
+        "page": 9
+      },
+      {
+        "source": "OSSA_Lecture_3.pdf",
+        "page": 10
+      }
+    ],
+    "gold_standard_answer": "A Process Control Block (PCB) is an operating system data structure representing a process. It stores all information needed to manage and resume the process, including: process state (new, ready, etc.), the program counter (next instruction address), CPU registers, CPU scheduling information (like priorities), memory management information (page/segment tables), accounting information (CPU time used), and I/O status information (open files, assigned devices)."
+  },
+  {
+    "query": "What are the main hard disk scheduling algorithms used in operating systems?",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_10.pdf",
+        "page": 10
+      }
+    ],
+    "gold_standard_answer": "The main hard disk scheduling algorithms are: (1) FCFS (First-Come, First-Served): requests are served in order; (2) SSTF (Shortest Seek Time First): selects the request closest to the current disk arm position; (3) SCAN: the disk arm moves from one end to the other, serving requests along the way, then reverses direction; (4) C-SCAN (Circular SCAN): moves the arm in one direction serving requests, then immediately returns to the start without serving requests on the return trip; (5) LOOK: similar to SCAN, but only goes as far as the last request in each direction; and (6) C-LOOK: similar to C-SCAN, but only goes as far as the last request in the direction of travel."
+  },
+  {
+    "query": "What is virtual memory and what are its primary advantages?",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_11.pdf",
+        "page": 2
+      },
+      {
+        "source": "OSSA_Tutorial_11.pdf",
+        "page": 1
+      }
+    ],
+    "gold_standard_answer": "Virtual memory is a memory management technique that allows the execution of processes that are not completely loaded into main physical memory. Its primary advantages are: (1) Allowing programs to be larger than physical memory; (2) Increasing CPU utilization and the degree of multiprogramming by fitting more processes into physical memory; (3) Simplifying programming by providing a large, logical, and contiguous address space; and (4) Speeding up process loading since less physical memory needs to be loaded initially."
+  },
+  {
+    "query": "Explain the concept of paging in memory management.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_11.pdf",
+        "page": 27
+      }
+    ],
+    "gold_standard_answer": "Paging is a memory management scheme that eliminates the need for contiguous allocation of physical memory. It works by dividing physical memory into fixed-size blocks called frames, and logical memory into blocks of the same size called pages. The operating system uses page tables to map logical pages to physical frames, allowing processes to be allocated physical memory wherever it is available, which avoids external fragmentation."
+  },
+  {
+    "query": "What is a critical section and what is the critical-section problem?",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 9
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 10
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 11
+      }
+    ],
+    "gold_standard_answer": "A critical section is a segment of code within cooperating processes where shared resources (such as common variables, files, or tables) are accessed and modified. The critical-section problem is to design a coordination protocol (like mutexes or semaphores) that ensures processes cooperate safely, satisfying three requirements: (1) Mutual exclusion: only one process executes in its critical section at a time; (2) Progress: if no process is in its critical section, only processes wishing to enter can participate in deciding which enters next; and (3) Bounded waiting: there is a limit on the number of times other processes can enter their critical sections before a waiting process is granted access."
+  },
+  {
+    "query": "How does a thread differ from a process in thread management?",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_4.pdf",
+        "page": 4
+      },
+      {
+        "source": "OSSA_Lecture_4.pdf",
+        "page": 6
+      }
+    ],
+    "gold_standard_answer": "A process is an isolated, executing program with its own dedicated memory space, resources, and execution environment. In contrast, a thread is a basic unit of CPU utilization (a 'lightweight process') running *within* a process. While processes are isolated from one another, multiple threads belonging to the same process share its code section, data section, and operating system resources (like open files). However, each thread retains its own unique register set, program counter, and stack."
+  }
+]
