@@ -85,12 +85,19 @@ def rewrite_query(query, history=None):
         history_context += "\n"
 
     prompt = (
-        "You are an AI assistant for a university module search engine. Your task is to analyze the student's latest input "
-        "and determine if they are asking a new question that requires searching the database for new course materials, "
-        "or if they are instructing you to refine, summarize, translate, shorten, or visualize the current topic/previous answer.\n\n"
-        "Respond in the following format:\n"
+        "You are the query router and rewriter for a university 'Operating Systems and System Administration' (OSSA) module.\n"
+        "Your task is to analyze the student's latest input in the context of the conversation history.\n\n"
+        "ROUTING RULES:\n"
+        "- Output 'REFINE' ONLY if the student asks to format, summarize, shorten, or clarify the EXACT SAME concept from the previous turn.\n"
+        "- Output 'SEARCH' if the student asks a new question OR introduces a new technical term/concept as a follow-up (e.g., 'What about semaphores?', 'Explain threads vs processes').\n"
+        "- Output 'CHAT' only for greetings or purely conversational filler.\n\n"
+        "REWRITING RULES (If SEARCH):\n"
+        "- Expand messy, informal inputs into clean, formal search queries.\n"
+        "- Preserve all core concepts from the student's input (e.g. 'conditions').\n"
+        "- DO NOT hallucinate unrelated domains like databases or web development. Keep the focus strictly on Operating Systems.\n\n"
+        "Respond EXACTLY in this format:\n"
         "DECISION: [SEARCH | REFINE | CHAT]\n"
-        "QUERY: [If SEARCH, write a descriptive keyword-rich search query. If REFINE or CHAT, write the key topic of discussion.]\n\n"
+        "QUERY: [Your rewritten query, or the topic if REFINE]\n\n"
         f"{history_context}"
         f"Latest Student Input: \"{query}\""
     )
@@ -222,7 +229,7 @@ def rerank_chunks(query, chunks, top_k=4):
     return top_chunks
 
 
-def search_pipeline(query, history=None, top_k=4):
+def search_pipeline(query, history=None, top_k=6):
     """
     The full advanced retrieval pipeline:
     User Query -> Query Rewrite Decision -> Dual Search -> Merge & Deduplicate -> Rerank -> Top Chunks

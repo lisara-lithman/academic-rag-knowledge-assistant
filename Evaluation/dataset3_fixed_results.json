@@ -1,0 +1,633 @@
+[
+  {
+    "query": "whats the diff between preemptive and non preemptive",
+    "gold_answer": "In preemptive scheduling the OS can suspend a running process at any point to give the CPU to another process. In non-preemptive scheduling the process keeps the CPU until it finishes its entire execution or voluntarily gives it up.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 5
+      }
+    ],
+    "decision": "SEARCH",
+    "rewritten_query": "What is the difference between preemptive and non-preemptive scheduling in operating systems?",
+    "retrieved_chunks": [
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 5,
+        "score": 5.7338
+      },
+      {
+        "source": "Mid Revision.pdf",
+        "page": 2,
+        "score": 1.5895
+      },
+      {
+        "source": "OSSA_Tutorial_5.pdf",
+        "page": 1,
+        "score": 1.1215
+      },
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 16,
+        "score": 0.9391
+      },
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 12,
+        "score": -4.982
+      },
+      {
+        "source": "OSSA_Lecture_3.pdf",
+        "page": 13,
+        "score": -11.2736
+      }
+    ],
+    "generated_answer": "**Preemptive vs Non-Preemptive Scheduling**\n\nAccording to the module materials, the main difference between preemptive and non-preemptive scheduling is:\n\n* **Preemptive Scheduling**: When a process is in the CPU, the execution can be suspended at any point. (Slide 1)\n* **Non-Preemptive Scheduling**: When a process is in the CPU, the execution cannot be suspended until it completes the entire execution. (Slide 1)\n\nIn other words, in preemptive scheduling, the CPU can be taken away from a process at any time, while in non-preemptive scheduling, a process will continue to execute until it completes its entire execution.\n\nAdditionally, Slide 3 mentions that the difference between preemptive and non-preemptive scheduling is also discussed in the module, but the exact details are not provided in the context materials.\n\n**Key Points:**\n\n* Preemptive scheduling allows the CPU to be taken away from a process at any time.\n* Non-preemptive scheduling requires a process to complete its entire execution before the CPU can be taken away.\n* Preemptive scheduling is more flexible, while non-preemptive scheduling can lead to longer waiting times.",
+    "category": "NOISY_QUESTION"
+  },
+  {
+    "query": "explain pcb simply",
+    "gold_answer": "A PCB (Process Control Block) is a data structure used by the OS to store all the key details about a process \u2014 things like its current state, process ID, program counter, CPU registers, and memory allocation.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_3.pdf",
+        "page": 9
+      },
+      {
+        "source": "OSSA_Lecture_3.pdf",
+        "page": 10
+      }
+    ],
+    "decision": "SEARCH",
+    "rewritten_query": "What is a Process Control Block (PCB) and how does it relate to process management in operating systems?",
+    "retrieved_chunks": [
+      {
+        "source": "OSSA_Lecture_3.pdf",
+        "page": 9,
+        "score": 3.3473
+      },
+      {
+        "source": "OSSA_Lecture_3.pdf",
+        "page": 10,
+        "score": 1.9409
+      },
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 4,
+        "score": -1.7183
+      },
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 6,
+        "score": -2.1285
+      },
+      {
+        "source": "OSSA_Lecture_1.pdf",
+        "page": 3,
+        "score": -7.0948
+      },
+      {
+        "source": "OSSA_Lab_4.pdf",
+        "page": 1,
+        "score": -9.614
+      }
+    ],
+    "generated_answer": "**Process Control Block (PCB) Explained Simply**\n\nA Process Control Block (PCB) is a crucial component in the operating system that stores essential details about a process. Think of it as a container that holds all the necessary information about a process.\n\n**What does a PCB contain?**\n\nA PCB contains the following essential details about a process:\n\n* **Process state**: Whether the process is running, waiting, or in another state\n* **Process number (Process ID)**: A unique identifier for the process\n* **Program counter**: The location of the next instruction to be executed\n* **CPU registers**: The contents of all process-centric registers\n* **CPU scheduling information**: Priorities, scheduling queue pointers, and other relevant information\n* **Memory-management information**: The memory allocated to the process\n* **Accounting information**: CPU usage, clock time elapsed since start, time limits, and other accounting details\n* **I/O status information**: I/O devices allocated to the process and a list of open files\n\n**In simple terms, a PCB is like a file folder that stores all the necessary information about a process. It helps the operating system manage processes efficiently and make informed decisions about CPU allocation and scheduling.**",
+    "category": "NOISY_QUESTION"
+  },
+  {
+    "query": "i dont understand deadlocks can u explain what conditions needed",
+    "gold_answer": "A deadlock happens when four conditions hold at the same time: (1) Mutual exclusion \u2014 only one process can use a resource at a time; (2) Hold and wait \u2014 a process holds a resource and waits for more; (3) No preemption \u2014 resources cannot be forcibly taken away; (4) Circular wait \u2014 a chain of processes each waiting on the next.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_9.pdf",
+        "page": 6
+      }
+    ],
+    "decision": "SEARCH",
+    "rewritten_query": "What are the conditions required to occur a deadlock in operating systems?",
+    "retrieved_chunks": [
+      {
+        "source": "2017-oct.pdf",
+        "page": 5,
+        "score": 2.8515
+      },
+      {
+        "source": "OSSA_Lecture_9.pdf",
+        "page": 14,
+        "score": 0.5674
+      },
+      {
+        "source": "OSSA_Lecture_9.pdf",
+        "page": 16,
+        "score": -2.5171
+      },
+      {
+        "source": "OSSA_Lecture_9.pdf",
+        "page": 13,
+        "score": -3.7425
+      },
+      {
+        "source": "OSSA_Lecture_9.pdf",
+        "page": 3,
+        "score": -4.9677
+      },
+      {
+        "source": "OSSA_Lecture_9.pdf",
+        "page": 2,
+        "score": -9.3053
+      }
+    ],
+    "generated_answer": "**Deadlock Conditions**\n\nTo understand deadlocks, let's break down the necessary conditions for a deadlock to occur in a system:\n\n*   **Mutual Exclusion**: Two or more processes are competing for the same resource, and only one process can use it at a time.\n*   **Hold and Wait**: A process is holding a resource and waiting for another resource that is held by another process.\n*   **No Preemption**: The operating system cannot take a resource away from a process that is holding it.\n*   **Circular Wait**: A process is waiting for a resource that is held by another process, which in turn is waiting for a resource held by the first process, and so on.\n\nThese conditions are necessary for a deadlock to occur. If any one of these conditions is not met, a deadlock cannot happen.\n\n**Why Do We Draw Resource Allocation Graphs?**\n\nWe draw resource allocation graphs to visualize the resource allocation state of a system. This helps us to identify potential deadlocks and understand the relationships between processes and resources.\n\n**Is the System in a Deadlock Situation?**\n\nTo determine if the system is in a deadlock situation, we need to examine the resource allocation graph and the process allocation table. If we find a circular wait condition, where a process is waiting for a resource held by another process, which in turn is waiting for a resource held by the first process, and so on, then the system is in a deadlock situation.\n\nHowever, based on the provided context materials, we cannot determine if the system is in a deadlock situation without more information about the resource allocation graph and the process allocation table.",
+    "category": "NOISY_QUESTION"
+  },
+  {
+    "query": "starvation in scheduling? and how to fix",
+    "gold_answer": "Starvation occurs in priority scheduling when low-priority processes may never execute because higher-priority processes keep arriving. The solution is Aging \u2014 a technique where the priority of a waiting process is gradually increased over time so it eventually gets to run.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 16
+      }
+    ],
+    "decision": "SEARCH",
+    "rewritten_query": "scheduling starvation and solutions",
+    "retrieved_chunks": [
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 16,
+        "score": 1.5777
+      },
+      {
+        "source": "OSSA_Lecture_9.pdf",
+        "page": 27,
+        "score": -3.9559
+      },
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 9,
+        "score": -9.5891
+      },
+      {
+        "source": "OSSA_Lecture_9.pdf",
+        "page": 17,
+        "score": -11.1445
+      },
+      {
+        "source": "OSSA_Lecture_9.pdf",
+        "page": 16,
+        "score": -11.2575
+      },
+      {
+        "source": "2023-Nov.pdf",
+        "page": 4,
+        "score": -11.2895
+      }
+    ],
+    "generated_answer": "**Starvation in Scheduling:**\n\nStarvation occurs when a low-priority process may never execute due to the CPU being allocated to higher-priority processes.\n\n**Causes of Starvation:**\n\n* The CPU is allocated to the process with the highest priority (smallest integer \u2261 highest priority).\n* This may be preemptive or non-preemptive.\n* Low-priority processes may never execute.\n\n**Solution to Starvation:**\n\n* Aging: The priority increases with time. This is a solution to prevent starvation.\n\n**Example of Aging:**\n\n* Initially, a process has a low priority (high integer value).\n* As time passes, the priority increases (decreases integer value).\n* Eventually, the process becomes a high-priority process and executes.\n\n**Preventing Starvation:**\n\n* Include number of rollbacks in cost factor (Deadlock Recovery).\n* Use checkpoints during execution (Deadlock Recovery).\n\n**Preventing Starvation in Banker's Algorithm:**\n\n* Use the Banker's algorithm to allocate resources.\n* Check if there is a deadlock or not.\n* If there is a deadlock, draw the cycle of waiting processes.\n* If not, provide a possible safe sequence to complete the processes.\n\n**Safe Sequence:**\n\n* A safe sequence is a sequence of processes where each process can execute without causing a deadlock.\n* A safe sequence is found by checking if the resources requested by each process can be allocated from the currently available resources + resources held by all previous processes.\n\n**Example of Safe Sequence:**\n\n* Suppose we have three processes P1, P2, and P3.\n* P1 requests resources A and B.\n* P2 requests resources B and C.\n* P3 requests resources C and D.\n* A safe sequence is P1, P2, P3.\n\n**Preventing Starvation in Deadlock Recovery:**\n\n* Roll back the process to some safe state and restart from there.\n* Destroy the process and restart (easiest way).\n* Use checkpoints during execution to prevent starvation.\n\n**Preventing Starvation in Deadlock Avoidance:**\n\n* Dynamically examine the resource-allocation state to ensure that there can never be a circular-wait condition.\n* Use the deadlock-avoidance algorithm to prevent starvation.\n\n**Preventing Starvation in Optimization Criteria:**\n\n* Maximize the CPU utilization.\n* Maximize the throughput.\n* Minimize the turnaround time.\n* Minimize the waiting time.\n* Minimize the response time.\n\n```mermaid\ngraph LR\n    A[Starvation] -->|Causes| B[Low-priority process never executes]\n    B -->|Solution| C[Aging]\n    C -->|Example| D[Priority increases with time]\n    D -->|Preventing Starvation| E[Include number of rollbacks in cost factor]\n    E -->|Preventing Starvation| F[Use checkpoints during execution]\n    F -->|Preventing Starvation in Banker's Algorithm| G[Use Banker's algorithm]\n    G -->|Safe Sequence| H[Safe sequence of processes]\n    H -->|Preventing Starvation in Deadlock Recovery| I[Roll back process to safe state]\n    I -->|Preventing Starvation in Deadlock Avoidance| J[Dynamically examine resource-allocation state]\n    J -->|Preventing Starvation in Optimization Criteria| K[Maximize CPU utilization]\n```",
+    "category": "NOISY_QUESTION"
+  },
+  {
+    "query": "what happens when two processes try to use the same data at the same time",
+    "gold_answer": "This creates a critical section problem. A critical section is a segment of code where shared data (like variables, buffers, or files) is being modified. If two processes enter their critical sections at the same time, they can corrupt the shared data. The OS must enforce mutual exclusion so only one process can be in its critical section at a time.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 11
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 9
+      }
+    ],
+    "decision": "SEARCH",
+    "rewritten_query": "What happens when two processes attempt to access the same shared data simultaneously in a multi-process operating system?",
+    "retrieved_chunks": [
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 11,
+        "score": 3.7291
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 8,
+        "score": 0.293
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 4,
+        "score": -2.7703
+      },
+      {
+        "source": "OSSA_Lecture_3.pdf",
+        "page": 20,
+        "score": -5.703
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 2,
+        "score": -8.4115
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 37,
+        "score": -10.4044
+      }
+    ],
+    "generated_answer": "**Critical Section Problem and Race Condition**\n\nWhen two or more processes try to use the same data at the same time, it can lead to a critical section problem and a race condition.\n\n**Critical Section Problem:**\n\n* If more than one process executes its critical section at the same time, they may concurrently access and modify shared data.\n* This situation can result in data inconsistency.\n\n**Race Condition:**\n\n* A situation where several processes access and manipulate the shared data concurrently.\n* The outcome of the execution depends on the order in which the access takes place.\n* To prevent the race condition, it must ensure that only one process at a time can be manipulating the shared data.\n\n**Consequences of Unhandled Critical Section Problem and Race Condition:**\n\n* Data inconsistency\n* Unpredictable behavior of the system\n\n**Solution to Critical Section Problem and Race Condition:**\n\n* Process synchronization applies to prevent the critical section problem and race condition.\n* Mechanisms to ensure the orderly execution of cooperating processes are required to maintain data consistency.",
+    "category": "NOISY_QUESTION"
+  },
+  {
+    "query": "How do I build a REST API in Python using Flask?",
+    "gold_answer": "I cannot find the answer in the module materials. This question is about web development which is not covered in the Operating Systems and System Administration module.",
+    "target_chunks": [],
+    "decision": "SEARCH",
+    "rewritten_query": "None (Purely conversational filler, unrelated to the OSSA module)",
+    "retrieved_chunks": [
+      {
+        "source": "OSSA_Lecture_4.pdf",
+        "page": 15,
+        "score": -10.0164
+      },
+      {
+        "source": "OSSA_Lecture_9.pdf",
+        "page": 21,
+        "score": -11.3187
+      },
+      {
+        "source": "OSSA_Lecture_2.pdf",
+        "page": 23,
+        "score": -11.3583
+      },
+      {
+        "source": "OSSA_Lecture_10.pdf",
+        "page": 15,
+        "score": -11.3629
+      },
+      {
+        "source": "OSSA_Lecture_2.pdf",
+        "page": 18,
+        "score": -11.3701
+      },
+      {
+        "source": "OSSA_Lecture_10.pdf",
+        "page": 11,
+        "score": -11.4001
+      }
+    ],
+    "generated_answer": "I cannot find the answer in the module materials.",
+    "category": "OUT_OF_SCOPE"
+  },
+  {
+    "query": "What is the difference between SQL and NoSQL databases?",
+    "gold_answer": "I cannot find the answer in the module materials. Database management systems are not covered in this Operating Systems and System Administration module.",
+    "target_chunks": [],
+    "decision": "SEARCH",
+    "rewritten_query": "What is the difference between relational databases (SQL) and non-relational databases (NoSQL) in the context of Operating Systems?",
+    "retrieved_chunks": [
+      {
+        "source": "OSSA_Lecture_8.pdf",
+        "page": 13,
+        "score": -8.3854
+      },
+      {
+        "source": "OSSA_Lecture_8.pdf",
+        "page": 14,
+        "score": -8.8343
+      },
+      {
+        "source": "OSSA_Lecture_8.pdf",
+        "page": 5,
+        "score": -9.0038
+      },
+      {
+        "source": "OSSA_Lecture_10.pdf",
+        "page": 18,
+        "score": -9.7016
+      },
+      {
+        "source": "OSSA_Lecture_10.pdf",
+        "page": 17,
+        "score": -10.0443
+      },
+      {
+        "source": "OSSA_Lecture_2.pdf",
+        "page": 19,
+        "score": -10.0511
+      }
+    ],
+    "generated_answer": "I cannot find the answer in the module materials.",
+    "category": "OUT_OF_SCOPE"
+  },
+  {
+    "query": "What is the best way to study for exams?",
+    "gold_answer": "I cannot find the answer in the module materials. This question is not related to Operating Systems and System Administration.",
+    "target_chunks": [],
+    "decision": "SEARCH",
+    "rewritten_query": "(No query, as this is a conversational filler)",
+    "retrieved_chunks": [
+      {
+        "source": "OSSA_Lab_10_Guide.pdf",
+        "page": 7,
+        "score": -6.7807
+      },
+      {
+        "source": "OSSA_Lab_3.pdf",
+        "page": 3,
+        "score": -8.7621
+      },
+      {
+        "source": "2023-Nov-2.pdf",
+        "page": 1,
+        "score": -10.5649
+      },
+      {
+        "source": "2015-2.pdf",
+        "page": 1,
+        "score": -10.6616
+      },
+      {
+        "source": "OSSA_Lab_3.pdf",
+        "page": 4,
+        "score": -10.7172
+      },
+      {
+        "source": "OSSA_Lecture_8.pdf",
+        "page": 41,
+        "score": -10.875
+      }
+    ],
+    "generated_answer": "I cannot find the answer to your question in the module materials.",
+    "category": "OUT_OF_SCOPE"
+  },
+  {
+    "query": "What are the main scheduling algorithms?",
+    "gold_answer": "There are two scheduling domains covered in the module. For CPU scheduling, the main algorithms are FCFS, SJF, Priority Scheduling, and Round Robin. For disk scheduling, the main algorithms are FCFS, SSTF, SCAN, C-SCAN, LOOK, and C-LOOK.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 7
+      },
+      {
+        "source": "OSSA_Lecture_10.pdf",
+        "page": 10
+      }
+    ],
+    "decision": "SEARCH",
+    "rewritten_query": "What are the main scheduling algorithms used in operating systems?",
+    "retrieved_chunks": [
+      {
+        "source": "OSSA_Lecture_3.pdf",
+        "page": 13,
+        "score": 3.5885
+      },
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 23,
+        "score": 2.2341
+      },
+      {
+        "source": "OSSA_Lecture_10.pdf",
+        "page": 7,
+        "score": 2.1562
+      },
+      {
+        "source": "OSSA_Lecture_10.pdf",
+        "page": 8,
+        "score": 1.8396
+      },
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 3,
+        "score": 1.4527
+      },
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 9,
+        "score": 0.9583
+      }
+    ],
+    "generated_answer": "**Main Scheduling Algorithms**\n\nUnfortunately, the provided context materials do not explicitly mention the main scheduling algorithms. However, we can infer that there are different types of schedulers mentioned in the context, such as:\n\n* **Short-term scheduler (or CPU scheduler)**: selects which process should be executed next and allocates CPU\n* **Long-term scheduler (or job scheduler)**: selects which processes should be brought into the memory/ ready queue\n\nHowever, to answer the question, we need to refer to another context material that is not provided.\n\nI cannot find the answer in the module materials.",
+    "category": "AMBIGUOUS_QUESTION"
+  },
+  {
+    "query": "How does synchronization work between processes?",
+    "gold_answer": "Process synchronization is the mechanism that ensures orderly access to shared resources. The critical section must be protected using tools like semaphores. A semaphore is an integer variable that can only be accessed through two atomic operations: wait() and signal(), ensuring that only one process modifies shared data at a time.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 22
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 9
+      }
+    ],
+    "decision": "SEARCH",
+    "rewritten_query": "What are the synchronization mechanisms used between processes in operating systems?",
+    "retrieved_chunks": [
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 8,
+        "score": 2.844
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 35,
+        "score": 1.2234
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 2,
+        "score": -0.5729
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 37,
+        "score": -0.8827
+      },
+      {
+        "source": "2014-June.pdf",
+        "page": 2,
+        "score": -2.2645
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 4,
+        "score": -6.8547
+      }
+    ],
+    "generated_answer": "**Process Synchronization Overview**\n\nProcess synchronization is a mechanism to ensure that multiple processes access and manipulate shared data in a coordinated manner, preventing data inconsistencies and ensuring orderly execution.\n\n**Key Concepts:**\n\n* **Race Condition**: A situation where several processes access and manipulate shared data concurrently, and the outcome depends on the order of access. To prevent this, only one process should be manipulating the shared data at a time.\n* **Process Synchronization**: Ensures that only one process can access and manipulate shared data at a time.\n* **Critical Section Problem**: A situation where multiple processes need to access a shared resource, and only one process can access it at a time.\n\n**Synchronization Mechanisms:**\n\n* **Monitors**: A high-level abstraction that provides a convenient and effective mechanism for process synchronization. Only one process may be active within the monitor at a time.\n* **Test-and-Set**: A synchronization primitive that allows a process to test a shared variable and set it to a new value in a single operation.\n\n**Requirements for Critical Section Problem Solution:**\n\n* **Mutual Exclusion**: Only one process can access the critical section at a time.\n* **Progress**: A process that is ready to access the critical section should be able to do so.\n* **Bounded Waiting**: A process should not wait indefinitely to access the critical section.\n\n**Busy Waiting:**\n\n* Busy waiting is a technique where a process continuously checks a shared variable to see if it can access a critical section.\n* The disadvantage of busy waiting is that it can lead to high CPU utilization and waste system resources.\n\n**Example Code:**\n\n* The code segment provided tries to solve the critical section problem using a flag variable.\n* However, the code does not satisfy the mutual exclusion requirement, as multiple processes can access the critical section simultaneously.\n\n**Diagram (ASCII Art):**\n```mermaid\ngraph LR\n    A[Process 1] -->|access shared data|> B[Critical Section]\n    C[Process 2] -->|access shared data|> B\n    style B fill:#f9f,stroke:#333,stroke-width:2px\n```\nNote: The diagram represents two processes accessing a critical section, illustrating the need for synchronization to prevent data inconsistencies.",
+    "category": "AMBIGUOUS_QUESTION"
+  },
+  {
+    "query": "Explain how memory is managed in an OS",
+    "gold_answer": "Memory management in an OS involves tracking which parts of physical memory are in use. The CPU can only directly access memory (RAM) and registers. Techniques like paging divide memory into fixed-size frames and pages. Virtual memory extends this further by allowing processes that are not fully loaded in RAM to execute, loading pages on demand (demand paging).",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_11.pdf",
+        "page": 4
+      },
+      {
+        "source": "OSSA_Lecture_11.pdf",
+        "page": 27
+      }
+    ],
+    "decision": "SEARCH",
+    "rewritten_query": "What are the key mechanisms and strategies employed by an Operating System to manage memory allocation and deallocation?",
+    "retrieved_chunks": [
+      {
+        "source": "OSSA_Lecture_11.pdf",
+        "page": 7,
+        "score": 5.9102
+      },
+      {
+        "source": "OSSA_Lecture_2.pdf",
+        "page": 5,
+        "score": 3.7917
+      },
+      {
+        "source": "OSSA_Lecture_11.pdf",
+        "page": 12,
+        "score": 1.5607
+      },
+      {
+        "source": "OSSA_Lecture_1.pdf",
+        "page": 22,
+        "score": -0.4835
+      },
+      {
+        "source": "OSSA_Lecture_11.pdf",
+        "page": 2,
+        "score": -1.781
+      },
+      {
+        "source": "OSSA_Lecture_11.pdf",
+        "page": 4,
+        "score": -2.3149
+      }
+    ],
+    "generated_answer": "**Memory Management in an OS**\n\nThe Operating System (OS) is responsible for managing memory in a computer system. Here are the key activities involved in memory management:\n\n* **Tracking Memory Usage**: The OS keeps track of which parts of memory are being used and by which processes.\n* **Memory Allocation and Deallocation**: The OS allocates and deallocates memory for each process as needed.\n* **Process Scheduling**: The OS decides which processes to load next when memory space becomes available.\n\n**Memory Management Techniques**\n\nThere are several memory management techniques used by the OS:\n\n* **Contiguous Allocation**: Each process is allocated a single continuous block of memory in RAM. The OS finds a contiguous block large enough to hold the process when it is loaded into memory.\n\n**Memory Protection**\n\nThe OS provides memory protection to prevent processes from accessing each other's memory. It uses two registers:\n\n* **Base Register**: Holds the smallest legal physical memory address.\n* **Limit Register**: Contains the size of the range of legal addresses.\n\nMemory outside the defined range is protected, and the load instructions for the base and limit registers are privileged instructions.\n\n**Main Memory**\n\nMain memory is a large array of words or bytes, each with its own address. It is a repository of quickly accessible data shared by the CPU and I/O devices. Memory and registers are the only storage that the CPU can directly access.\n\n**Memory Management in Multiprogramming**\n\nIn a multiprogramming environment, the OS must consider the following services to support memory management:\n\n* **Job Scheduling**: The OS chooses jobs in the job pool and puts them into memory.\n* **Memory Management**: The OS allocates the memory for each job.\n* **CPU Scheduling**: The OS chooses one among the jobs in memory (called processes) that is ready to run.\n* **I/O Allocation**: The OS allocates I/O devices for each job.\n\nThese are the key aspects of memory management in an OS, as per the provided context materials.",
+    "category": "AMBIGUOUS_QUESTION"
+  },
+  {
+    "query": "can you make that shorter",
+    "gold_answer": "A deadlock requires four conditions: Mutual exclusion, Hold and wait, No preemption, and Circular wait \u2014 all must be present simultaneously.",
+    "target_chunks": [],
+    "decision": "REFINE",
+    "rewritten_query": "Deadlock conditions",
+    "retrieved_chunks": [],
+    "generated_answer": "A deadlock occurs when four conditions hold: Mutual exclusion, Hold and wait, No preemption, and Circular wait.",
+    "category": "MULTI_TURN",
+    "expected_decision": "REFINE"
+  },
+  {
+    "query": "What about semaphores, how are they used?",
+    "gold_answer": "A semaphore is a synchronization tool represented by an integer variable (S). It can only be accessed through two atomic operations: wait() \u2014 which decrements S and blocks the process if S is 0 \u2014 and signal() \u2014 which increments S and wakes a waiting process.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 22
+      }
+    ],
+    "decision": "SEARCH",
+    "rewritten_query": "How are semaphores used in Operating Systems to manage shared resources and prevent concurrent access?",
+    "retrieved_chunks": [
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 22,
+        "score": 3.9785
+      },
+      {
+        "source": "2015.pdf",
+        "page": 2,
+        "score": 3.3638
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 24,
+        "score": 3.2275
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 34,
+        "score": 1.8169
+      },
+      {
+        "source": "2014-June.pdf",
+        "page": 3,
+        "score": 0.9667
+      },
+      {
+        "source": "2023-Nov-2.pdf",
+        "page": 3,
+        "score": 0.4585
+      }
+    ],
+    "generated_answer": "**Semaphores: A Synchronization Tool**\n\nA semaphore is a synchronization tool that provides a more sophisticated way for processes to synchronize their activities. It is an integer variable (S) that can only be accessed via two indivisible (atomic) operations:\n\n*   **wait()**: Decrements the semaphore value by 1.\n*   **signal()**: Increments the semaphore value by 1.\n\n**Possible Errors when Using Semaphores**\n\nWhen a programmer uses semaphores in code, the following errors can occur:\n\n*   **Incorrect use of semaphore operations**: signal(mutex) ... wait(mutex) wait(mutex) ... wait(mutex)\n*   **Omitting of wait(mutex) or signal(mutex) (or both)**\n\n**Solution to Errors**\n\nThe solution to these errors is to ensure that the semaphore operations are used correctly, and that the mutex (mutual exclusion) is properly locked and unlocked.\n\n**Semaphore Implementation**\n\nSemaphores are implemented in two methods:\n\n*   **Spinlock**: Uses busy waiting\n*   **Block and wake-up**: Blocks the execution and waits in a semaphore list\n\n**Problems with Semaphores**\n\nSome problems with semaphores include:\n\n*   **Incorrect use of semaphore operations**\n*   **Omitting of wait(mutex) or signal(mutex) (or both)**\n*   **Deadlock and starvation are possible**\n\n**Access Controlling Problem**\n\nTo solve the access controlling problem, **two semaphores** are needed. The initial values for the selected semaphores are:\n\n*   **semaphore 1**: 1 (initialized to 1)\n*   **semaphore 2**: 1 (initialized to 1)\n\n**Pseudo-code with Semaphore for Barber and Customer Processes**\n\nThe pseudo-code with semaphore for Barber and Customer processes is not provided in the context materials.\n\n**Deadlock**\n\nA deadlock is a situation where two or more processes are unable to proceed because each is waiting for a resource held by another process.\n\n**Resource Allocation Graph (RAG)**\n\nA Resource Allocation Graph (RAG) is a graph that shows the allocation of resources to processes.\n\n**Wait for Graph (WFG)**\n\nA Wait for Graph (WFG) is a graph that shows the waiting relationships between processes.\n\n**Necessary Conditions for Deadlock**\n\nThe necessary conditions for deadlock are:\n\n*   **Mutual exclusion**: Two or more processes are competing for the same resource.\n*   **Hold and wait**: A process is holding a resource and waiting for another resource.\n*   **No preemption**: A process cannot be preempted by another process.\n*   **Circular wait**: A process is waiting for a resource held by another process, which is waiting for a resource held by a third process, and so on.\n\n**Handling Deadlock**\n\nMost operating systems handle deadlock by using a **timeout** mechanism. If a process is waiting for a resource and the resource is not available within a certain time limit, the process is terminated.\n\n**Detecting Deadlock**\n\nTwo methods of detecting deadlock are:\n\n*   **Resource allocation graph (RAG) analysis**: Analyzing the RAG to detect cycles, which indicate deadlock.\n*   **Wait for graph (WFG) analysis**: Analyzing the WFG to detect cycles, which indicate deadlock.\n\n**Critical Section Problem**\n\nThe critical section problem is a situation where two or more processes are competing for access to a shared resource.\n\n**Identifying Critical Sections**\n\nThe critical sections of p0 and p1 are:\n\n*   **p0**: The section of code where p0 is accessing the shared resource.\n*   **p1**: The section of code where p1 is accessing the shared resource.\n\n**Solving Critical Section Problem using Semaphores**\n\nThe critical section problem can be solved using semaphores by:\n\n*   **Initializing a semaphore**: Initializing a semaphore to 1, indicating that only one process can access the shared resource at a time.\n*   **Using wait() and signal()**: Using wait() and signal() to synchronize access to the shared resource.\n\n**Incorrect Use of Semaphore**\n\nTwo examples of incorrect use of semaphore are:\n\n*   **signal(mutex) ... wait(mutex) wait(mutex) ... wait(mutex)**\n*   **Omitting of wait(mutex) or signal(mutex) (or both)**",
+    "category": "MULTI_TURN",
+    "expected_decision": "SEARCH"
+  },
+  {
+    "query": "summarize that as bullet points",
+    "gold_answer": "Demand Paging summary:\n- Pages loaded into RAM only when needed\n- Avoids loading the entire program at startup\n- If a required page is missing, a page fault occurs\n- OS then loads the page from disk into a free frame",
+    "target_chunks": [],
+    "decision": "REFINE",
+    "rewritten_query": "Demand paging",
+    "retrieved_chunks": [],
+    "generated_answer": "**Demand Paging Summary:**\n\n* A virtual memory technique\n* Pages are only loaded into RAM when actually needed\n* Entire program is not loaded in advance\n* If a page is not in RAM when referenced, a **page fault** occurs\n* OS loads the required page from disk",
+    "category": "MULTI_TURN",
+    "expected_decision": "REFINE"
+  },
+  {
+    "query": "Now explain the difference between threads and processes",
+    "gold_answer": "A process is a heavyweight unit of execution with its own dedicated memory space and resources. A thread is a lightweight unit of CPU utilization that lives inside a process. Multiple threads within the same process share its code, data, and resources, but each thread has its own program counter, registers, and stack. Thread creation is faster and cheaper than process creation.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_4.pdf",
+        "page": 4
+      },
+      {
+        "source": "OSSA_Lecture_4.pdf",
+        "page": 5
+      }
+    ],
+    "decision": "SEARCH",
+    "rewritten_query": "What are the key differences between threads and processes in the context of CPU scheduling and operating system design?",
+    "retrieved_chunks": [
+      {
+        "source": "OSSA_Lecture_4.pdf",
+        "page": 4,
+        "score": 4.2508
+      },
+      {
+        "source": "OSSA_Lecture_4.pdf",
+        "page": 6,
+        "score": 2.7194
+      },
+      {
+        "source": "OSSA_Tutorial_4.pdf",
+        "page": 1,
+        "score": 2.337
+      },
+      {
+        "source": "OSSA_Lecture_4.pdf",
+        "page": 9,
+        "score": 1.1619
+      },
+      {
+        "source": "OSSA_Tutorial_4.pdf",
+        "page": 2,
+        "score": -2.0806
+      },
+      {
+        "source": "OSSA_Lecture_4.pdf",
+        "page": 16,
+        "score": -2.4843
+      }
+    ],
+    "generated_answer": "**Threads vs Processes: Key Differences**\n\nAccording to the module materials, a thread represents a single, independent stream of execution within a process/application (Slide 1). Each thread has its own PC and Stack, but all threads can access every address in the process (Slide 2).\n\n**Key differences:**\n\n*   **Separation of Execution**: A process is a separate entity with its own memory space, whereas threads share the same memory space as the parent process.\n*   **Creation Overhead**: Creating a new thread is cheaper than creating a new process, as it involves less overhead (Slide 4).\n*   **Resource Sharing**: Threads share resources of the process, making it easier to manage resources compared to processes (Slide 4).\n*   **Communication**: Inter-thread communication is faster than inter-process communication (Slide 5).\n\n**In summary**, threads are lightweight, independent streams of execution within a process, whereas processes are separate entities with their own memory space.",
+    "category": "MULTI_TURN",
+    "expected_decision": "SEARCH"
+  }
+]

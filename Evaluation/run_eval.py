@@ -1,94 +1,67 @@
-import os
-import sys
-import json
-import traceback
+import os, sys, json, traceback
 
-# Setup paths to import retrieval and ui from the parent workspace root
-EVAL_DIR = os.path.dirname(os.path.abspath(__file__))
-PARENT_DIR = os.path.dirname(EVAL_DIR)
-if PARENT_DIR not in sys.path:
-    sys.path.append(PARENT_DIR)
+# Add parent folder so we can import retrieval.py and ui.py
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from retrieval import search_pipeline
 from ui import generate_grounded_answer
 
-GOLDEN_DATASET_PATH = os.path.join(EVAL_DIR, "dataset2.json")
-RESULTS_PATH = os.path.join(EVAL_DIR, "evaluation_results.json")
+# Accept dataset filename as argument, default to dataset2.json
+EVAL_DIR   = os.path.dirname(os.path.abspath(__file__))
+DATASET    = sys.argv[1] if len(sys.argv) > 1 else "dataset2.json"
+INPUT_PATH = os.path.join(EVAL_DIR, DATASET)
+OUTPUT_PATH = os.path.join(EVAL_DIR, DATASET.replace(".json", "_results.json"))
 
-def run_evaluation():
-    # 1. Load the golden dataset
-    if not os.path.exists(GOLDEN_DATASET_PATH):
-        print(f"Error: {GOLDEN_DATASET_PATH} not found!")
-        return
 
-    with open(GOLDEN_DATASET_PATH, "r", encoding="utf-8") as f:
+def run():
+    with open(INPUT_PATH, "r") as f:
         dataset = json.load(f)
 
-    print(f"Loaded {len(dataset)} evaluation queries from {GOLDEN_DATASET_PATH}.\n")
-
+    print(f"Running {len(dataset)} queries from {DATASET}...\n")
     results = []
 
-    # 2. Iterate through each query and run the pipeline
-    for idx, item in enumerate(dataset):
-        query = item["query"]
-        print(f"[{idx+1}/{len(dataset)}] Processing Query: '{query}'")
+    for i, item in enumerate(dataset):
+        query   = item["query"]
+        history = item.get("conversation_history", None)
+        print(f"[{i+1}/{len(dataset)}] {query}")
 
         try:
-            # Step A: Run the search pipeline
-            decision, rewritten_query, retrieved_chunks = search_pipeline(query, history=None)
+            decision, rewritten, chunks = search_pipeline(query, history=history)
 
-            # Step B: Generate the answer using the retrieved context
-            generated_answer = generate_grounded_answer(
-                query=query, 
-                context_chunks=retrieved_chunks, 
-                history=None, 
-                is_refinement=False
+            answer = generate_grounded_answer(
+                query=query,
+                context_chunks=chunks,
+                history=history,
+                is_refinement=(decision == "REFINE")
             )
 
-            # Step C: Format retrieved chunks for logging
-            retrieved_info = []
-            for chunk in retrieved_chunks:
-                retrieved_info.append({
-                    "id": chunk.get("id"),
-                    "source": chunk["metadata"].get("source"),
-                    "page": chunk["metadata"].get("page"),
-                    "rerank_score": chunk.get("rerank_score", 0.0),
-                    "text_snippet": chunk.get("text", "")[:150] + "..."
-                })
+            result = {
+                "query":               query,
+                "gold_answer":         item["gold_standard_answer"],
+                "target_chunks":       item["target_chunks"],
+                "decision":            decision,
+                "rewritten_query":     rewritten,
+                "retrieved_chunks":    [{"source": c["metadata"]["source"],
+                                         "page":   c["metadata"]["page"],
+                                         "score":  round(c.get("rerank_score", 0), 4)} for c in chunks],
+                "generated_answer":    answer,
+            }
+            # Carry over optional fields if present
+            if "_category"        in item: result["category"]         = item["_category"]
+            if "expected_decision" in item: result["expected_decision"] = item["expected_decision"]
 
-            # Save results
-            results.append({
-                "query": query,
-                "gold_standard_answer": item["gold_standard_answer"],
-                "target_chunks": item["target_chunks"],
-                "pipeline_output": {
-                    "decision": decision,
-                    "rewritten_query": rewritten_query,
-                    "retrieved_chunks": retrieved_info,
-                    "generated_answer": generated_answer
-                }
-            })
-            print(f"Success! Retrieved {len(retrieved_chunks)} chunks.\n")
+            results.append(result)
+            print(f"  → Decision: {decision} | Chunks retrieved: {len(chunks)}\n")
 
         except Exception as e:
-            print(f"ERROR processing query: {e}")
+            results.append({"query": query, "error": str(e)})
             traceback.print_exc()
-            results.append({
-                "query": query,
-                "gold_standard_answer": item["gold_standard_answer"],
-                "target_chunks": item["target_chunks"],
-                "pipeline_output": {
-                    "error": str(e),
-                    "traceback": traceback.format_exc()
-                }
-            })
-            print()
 
-    # 3. Save the results to evaluation_results.json
-    with open(RESULTS_PATH, "w", encoding="utf-8") as f:
-        json.dump(results, f, indent=2, ensure_ascii=False)
+    with open(OUTPUT_PATH, "w") as f:
+        json.dump(results, f, indent=2)
 
-    print(f"Evaluation complete! Results saved to {RESULTS_PATH}")
+    print(f"Done. Results saved to {OUTPUT_PATH}")
+
 
 if __name__ == "__main__":
-    run_evaluation()
+    run()
