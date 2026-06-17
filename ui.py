@@ -19,7 +19,8 @@ h1 {
 }
 """
 
-def generate_grounded_answer(query, context_chunks, history=None, is_refinement=False):
+def stream_grounded_answer(query, context_chunks, history=None, is_refinement=False):
+    """Stream the grounded answer token by token using the LLM's streaming API."""
     client, provider = get_llm_client()
 
     context_text = ""
@@ -57,10 +58,13 @@ def generate_grounded_answer(query, context_chunks, history=None, is_refinement=
                 if u: messages.append({"role": "user",      "content": u})
                 if b: messages.append({"role": "assistant", "content": b})
         messages.append({"role": "user", "content": user_prompt})
-        r = client.chat.completions.create(
-            model="llama-3.1-8b-instant", messages=messages, temperature=0.2
+        stream = client.chat.completions.create(
+            model="llama-3.1-8b-instant", messages=messages, temperature=0.2, stream=True
         )
-        return r.choices[0].message.content.strip()
+        for chunk in stream:
+            delta = chunk.choices[0].delta.content
+            if delta:
+                yield delta
 
     elif provider == "gemini":
         contents = []
@@ -70,44 +74,53 @@ def generate_grounded_answer(query, context_chunks, history=None, is_refinement=
                 if b: contents.append(types.Content(role="model", parts=[types.Part.from_text(text=b)]))
         contents.append(types.Content(role="user", parts=[types.Part.from_text(text=user_prompt)]))
         cfg = types.GenerateContentConfig(system_instruction=system_prompt, temperature=0.2)
-        r = client.models.generate_content(model='gemini-2.5-flash', contents=contents, config=cfg)
-        return r.text.strip()
-
-    return "Error: unknown provider."
+        for chunk in client.models.generate_content_stream(
+            model='gemini-2.5-flash', contents=contents, config=cfg
+        ):
+            if chunk.text:
+                yield chunk.text
 
 
 def respond(user_message, history, last_chunks):
     if not user_message.strip():
-        return "", history, "<p style='color:#64748b;font-style:italic;'>Ask a question to view slides and citations.</p>", last_chunks
+        yield "", history, "<p style='color:#64748b;font-style:italic;'>Ask a question to view slides and citations.</p>", last_chunks
+        return
 
     try:
         decision, _, new_chunks, chat_response = search_pipeline(user_message, history=history)
     except Exception as e:
         print(f"[ERROR] search_pipeline: {e}")
-        history.append((user_message, f"⚠️ Retrieval error: {e}"))
-        return "", history, "<p style='color:red;'>Retrieval failed.</p>", last_chunks
+        history = history + [(user_message, f"⚠️ Retrieval error: {e}")]
+        yield "", history, "<p style='color:red;'>Retrieval failed.</p>", last_chunks
+        return
 
     # Handle greetings and purely conversational messages — the router already
     # generated a natural reply in the same LLM call, so use it directly.
     if decision == "CHAT":
-        history.append((user_message, chat_response))
+        history = history + [(user_message, chat_response)]
         no_sources = "<p style='color:#64748b;font-style:italic;'>No slides needed for this response.</p>"
-        return "", history, no_sources, last_chunks
+        yield "", history, no_sources, last_chunks
+        return
 
     if new_chunks:
         chunks = new_chunks
+    elif decision == "SEARCH":
+        # SEARCH was performed but every chunk scored below the relevance
+        # threshold — the query is out of scope. Skip the LLM entirely.
+        out_of_scope_msg = (
+            "I'm sorry, I couldn't find anything relevant to that question "
+            "in the OSSA module materials. Please try asking about topics covered "
+            "in the module, such as processes, scheduling, memory management, "
+            "deadlocks, or file systems."
+        )
+        history = history + [(user_message, out_of_scope_msg)]
+        no_sources = "<p style='color:#64748b;font-style:italic;'>No relevant slides found for this query.</p>"
+        yield "", history, no_sources, last_chunks
+        return
     else:
         chunks = last_chunks
 
-    is_refinement = (decision == "REFINE")
-    try:
-        answer = generate_grounded_answer(user_message, chunks, history=history, is_refinement=is_refinement)
-    except Exception as e:
-        print(f"[ERROR] generate_grounded_answer: {e}")
-        answer = f"⚠️ Answer generation error: {e}"
-
-    history.append((user_message, answer))
-
+    # Build sources HTML (shown immediately, before streaming begins)
     if not chunks:
         sources_html = "<p style='color:#64748b;font-style:italic;'>No reference slides found for this query.</p>"
     else:
@@ -127,7 +140,21 @@ def respond(user_message, history, last_chunks):
             </div>
             """
 
-    return "", history, sources_html, chunks
+    is_refinement = (decision == "REFINE")
+
+    # Stream the answer token by token.
+    # context_history is the history WITHOUT the current exchange (for LLM multi-turn context).
+    context_history = list(history)
+    history = history + [(user_message, "")]
+
+    try:
+        for token in stream_grounded_answer(user_message, chunks, history=context_history, is_refinement=is_refinement):
+            history[-1] = (history[-1][0], history[-1][1] + token)
+            yield "", history, sources_html, chunks
+    except Exception as e:
+        print(f"[ERROR] stream_grounded_answer: {e}")
+        history[-1] = (history[-1][0], f"⚠️ Answer generation error: {e}")
+        yield "", history, sources_html, chunks
 
 
 with gr.Blocks(

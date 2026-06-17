@@ -201,10 +201,13 @@ def merge_and_deduplicate(chunks_a, chunks_b):
     return unique_chunks
 
 
+RELEVANCE_THRESHOLD = 0.0
+
 def rerank_chunks(query, chunks, top_k=4):
     """
     Rerank a set of unique chunks against the original user query
     using a local Cross-Encoder model.
+    Chunks scoring below RELEVANCE_THRESHOLD are discarded as irrelevant.
     """
     if not chunks:
         return []
@@ -223,15 +226,24 @@ def rerank_chunks(query, chunks, top_k=4):
     # Sort by score in descending order
     chunks.sort(key=lambda x: x["rerank_score"], reverse=True)
 
-    # Keep only the top K chunks
-    top_chunks = chunks[:top_k]
+    # Filter out chunks that fall below the relevance threshold
+    relevant_chunks = [c for c in chunks if c["rerank_score"] >= RELEVANCE_THRESHOLD]
+    filtered_count = len(chunks) - len(relevant_chunks)
+    if filtered_count > 0:
+        print(f"Threshold filter: removed {filtered_count} chunk(s) with score < {RELEVANCE_THRESHOLD}")
+
+    # Keep only the top K from the relevant chunks
+    top_chunks = relevant_chunks[:top_k]
 
     print("\n--- Top Reranked Contexts ---")
-    for i, chunk in enumerate(top_chunks):
-        src = chunk['metadata']['source']
-        page = chunk['metadata']['page']
-        score = chunk['rerank_score']
-        print(f"[{i+1}] Score: {score:.4f} | Source: {src} (Page {page})")
+    if top_chunks:
+        for i, chunk in enumerate(top_chunks):
+            src = chunk['metadata']['source']
+            page = chunk['metadata']['page']
+            score = chunk['rerank_score']
+            print(f"[{i+1}] Score: {score:.4f} | Source: {src} (Page {page})")
+    else:
+        print("No chunks passed the relevance threshold — query is likely out of scope.")
     print("-----------------------------\n")
 
     return top_chunks
