@@ -1,4 +1,5 @@
 import os
+import time
 import chromadb
 from dotenv import load_dotenv
 from google import genai
@@ -66,6 +67,30 @@ def load_rerank_model():
     return _rerank_model
 
 
+def _is_rate_limit_error(e):
+    """Return True if the exception is an HTTP 429 rate-limit error from any LLM provider."""
+    err = str(e).lower()
+    return "429" in err or "rate limit" in err or "too many requests" in err or "ratelimit" in err
+
+
+def call_with_retry(fn, max_retries=3, base_wait=5):
+    """
+    Call fn() and retry on rate-limit errors using exponential backoff.
+    Wait times: 5s → 10s → 20s between successive retries.
+    Raises the original exception if all retries are exhausted.
+    """
+    for attempt in range(max_retries):
+        try:
+            return fn()
+        except Exception as e:
+            if _is_rate_limit_error(e) and attempt < max_retries - 1:
+                wait = base_wait * (2 ** attempt)   # 5, 10, 20 seconds
+                print(f"⚠️  Rate limit hit. Waiting {wait}s before retry {attempt + 2}/{max_retries}...")
+                time.sleep(wait)
+            else:
+                raise
+
+
 def rewrite_query(query, history=None):
     """
     Analyzes student query with context of history.
@@ -104,19 +129,22 @@ def rewrite_query(query, history=None):
     )
 
     try:
-        if provider == "groq":
-            completion = client.chat.completions.create(
-                model="llama-3.1-8b-instant",
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0.0
-            )
-            response_text = completion.choices[0].message.content.strip()
-        elif provider == "gemini":
-            response = client.models.generate_content(
-                model='gemini-2.5-flash',
-                contents=prompt
-            )
-            response_text = response.text.strip()
+        def _call_llm():
+            if provider == "groq":
+                completion = client.chat.completions.create(
+                    model="llama-3.1-8b-instant",
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0.0
+                )
+                return completion.choices[0].message.content.strip()
+            elif provider == "gemini":
+                response = client.models.generate_content(
+                    model='gemini-2.5-flash',
+                    contents=prompt
+                )
+                return response.text.strip()
+
+        response_text = call_with_retry(_call_llm)
 
         # Parse decision, query and optional chat response
         decision = "SEARCH"

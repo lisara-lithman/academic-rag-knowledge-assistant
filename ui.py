@@ -2,7 +2,7 @@ import os
 import gradio as gr
 from dotenv import load_dotenv
 from google.genai import types
-from retrieval import search_pipeline, get_llm_client, load_embedding_model, load_rerank_model
+from retrieval import search_pipeline, get_llm_client, load_embedding_model, load_rerank_model, call_with_retry
 
 load_dotenv()
 
@@ -58,8 +58,10 @@ def stream_grounded_answer(query, context_chunks, history=None, is_refinement=Fa
                 if u: messages.append({"role": "user",      "content": u})
                 if b: messages.append({"role": "assistant", "content": b})
         messages.append({"role": "user", "content": user_prompt})
-        stream = client.chat.completions.create(
-            model="llama-3.1-8b-instant", messages=messages, temperature=0.2, stream=True
+        stream = call_with_retry(
+            lambda: client.chat.completions.create(
+                model="llama-3.1-8b-instant", messages=messages, temperature=0.2, stream=True
+            )
         )
         for chunk in stream:
             delta = chunk.choices[0].delta.content
@@ -74,9 +76,12 @@ def stream_grounded_answer(query, context_chunks, history=None, is_refinement=Fa
                 if b: contents.append(types.Content(role="model", parts=[types.Part.from_text(text=b)]))
         contents.append(types.Content(role="user", parts=[types.Part.from_text(text=user_prompt)]))
         cfg = types.GenerateContentConfig(system_instruction=system_prompt, temperature=0.2)
-        for chunk in client.models.generate_content_stream(
-            model='gemini-2.5-flash', contents=contents, config=cfg
-        ):
+        stream = call_with_retry(
+            lambda: client.models.generate_content_stream(
+                model='gemini-2.5-flash', contents=contents, config=cfg
+            )
+        )
+        for chunk in stream:
             if chunk.text:
                 yield chunk.text
 
