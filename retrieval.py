@@ -97,7 +97,8 @@ def rewrite_query(query, history=None):
         "- DO NOT hallucinate unrelated domains like databases or web development. Keep the focus strictly on Operating Systems.\n\n"
         "Respond EXACTLY in this format:\n"
         "DECISION: [SEARCH | REFINE | CHAT]\n"
-        "QUERY: [Your rewritten query, or the topic if REFINE]\n\n"
+        "QUERY: [Your rewritten query, or the topic if REFINE]\n"
+        "RESPONSE: [Only fill this if DECISION is CHAT — write a short, warm, natural conversational reply to the student]\n\n"
         f"{history_context}"
         f"Latest Student Input: \"{query}\""
     )
@@ -117,15 +118,18 @@ def rewrite_query(query, history=None):
             )
             response_text = response.text.strip()
 
-        # Parse decision and query
+        # Parse decision, query and optional chat response
         decision = "SEARCH"
         rewritten = query
+        chat_response = ""
 
         for line in response_text.split("\n"):
             if line.startswith("DECISION:"):
                 decision = line.replace("DECISION:", "").strip()
             elif line.startswith("QUERY:"):
                 rewritten = line.replace("QUERY:", "").strip()
+            elif line.startswith("RESPONSE:"):
+                chat_response = line.replace("RESPONSE:", "").strip()
 
         # Clean quotes if model wrapped them
         if rewritten.startswith('"') and rewritten.endswith('"'):
@@ -137,14 +141,18 @@ def rewrite_query(query, history=None):
 
         # If there's no history, we cannot refine a previous answer
         if not history:
-            decision = "SEARCH"
+            decision = "SEARCH" if decision == "REFINE" else decision
+
+        # Fallback chat response if the LLM did not fill the RESPONSE field
+        if decision == "CHAT" and not chat_response:
+            chat_response = "Hello! 👋 Feel free to ask me anything about Operating Systems & System Administration!"
 
         print(f"User Input: '{query}' -> Decision: {decision} | Rewritten: '{rewritten}'")
-        return decision, rewritten
+        return decision, rewritten, chat_response
 
     except Exception as e:
         print(f"Warning: Query rewrite failed ({e}). Defaulting to SEARCH.")
-        return "SEARCH", query
+        return "SEARCH", query, ""
 
 
 def retrieve_chunks(query, n_results=5):
@@ -233,14 +241,15 @@ def search_pipeline(query, history=None, top_k=6):
     """
     The full advanced retrieval pipeline:
     User Query -> Query Rewrite Decision -> Dual Search -> Merge & Deduplicate -> Rerank -> Top Chunks
-    Returns: (decision, rewritten_query, final_context)
+    Returns: (decision, rewritten_query, final_context, chat_response)
+    chat_response is only populated when decision == 'CHAT'.
     """
     # 1. Rewrite user's query and get decision
-    decision, rewritten_query = rewrite_query(query, history=history)
+    decision, rewritten_query, chat_response = rewrite_query(query, history=history)
 
     if decision != "SEARCH":
-        # No new search needed, return empty chunks
-        return decision, rewritten_query, []
+        # No new search needed; return empty chunks and pass chat_response through
+        return decision, rewritten_query, [], chat_response
 
     # 2. Retrieve using original query
     chunks_original = retrieve_chunks(query, n_results=5)
@@ -254,7 +263,7 @@ def search_pipeline(query, history=None, top_k=6):
     # 5. Rerank against the ORIGINAL user query
     final_context = rerank_chunks(query, merged_chunks, top_k=top_k)
 
-    return decision, rewritten_query, final_context
+    return decision, rewritten_query, final_context, ""
 
 
 if __name__ == "__main__":

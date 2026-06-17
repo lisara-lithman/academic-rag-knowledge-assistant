@@ -2,7 +2,7 @@ import os
 import gradio as gr
 from dotenv import load_dotenv
 from google.genai import types
-from retrieval import search_pipeline, get_llm_client
+from retrieval import search_pipeline, get_llm_client, load_embedding_model, load_rerank_model
 
 load_dotenv()
 
@@ -81,11 +81,18 @@ def respond(user_message, history, last_chunks):
         return "", history, "<p style='color:#64748b;font-style:italic;'>Ask a question to view slides and citations.</p>", last_chunks
 
     try:
-        decision, _, new_chunks = search_pipeline(user_message, history=history)
+        decision, _, new_chunks, chat_response = search_pipeline(user_message, history=history)
     except Exception as e:
         print(f"[ERROR] search_pipeline: {e}")
         history.append((user_message, f"⚠️ Retrieval error: {e}"))
         return "", history, "<p style='color:red;'>Retrieval failed.</p>", last_chunks
+
+    # Handle greetings and purely conversational messages — the router already
+    # generated a natural reply in the same LLM call, so use it directly.
+    if decision == "CHAT":
+        history.append((user_message, chat_response))
+        no_sources = "<p style='color:#64748b;font-style:italic;'>No slides needed for this response.</p>"
+        return "", history, no_sources, last_chunks
 
     if new_chunks:
         chunks = new_chunks
@@ -170,6 +177,9 @@ with gr.Blocks(
 
 
 if __name__ == "__main__":
-    print("Launching OSSA AI Knowledge Assistant UI…")
+    print("Pre-loading models into memory — this takes a few seconds...")
+    load_embedding_model()
+    load_rerank_model()
+    print("Models loaded. Launching OSSA AI Knowledge Assistant UI…")
     demo.queue()
     demo.launch(server_name="127.0.0.1", server_port=7860)

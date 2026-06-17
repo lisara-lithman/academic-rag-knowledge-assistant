@@ -9,9 +9,9 @@ REFUSAL_PHRASES = ["cannot find", "not covered", "not mentioned",
 
 
 def get_fields(item):
-    """Reads fields from either the old nested format or the new flat format."""
+    
     if "pipeline_output" in item:
-        # Old format: fields nested inside pipeline_output
+       
         p = item["pipeline_output"]
         return (
             p.get("decision"),
@@ -19,7 +19,6 @@ def get_fields(item):
             p.get("generated_answer", ""),
         )
     else:
-        # New flat format from simplified run_eval.py
         return (
             item.get("decision"),
             item.get("retrieved_chunks", []),

@@ -3,7 +3,7 @@ import glob
 import pypdf
 import chromadb
 from dotenv import load_dotenv
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer, CrossEncoder
 
 # Load environment variables (.env)
 load_dotenv()
@@ -13,6 +13,7 @@ KNOWLEDGE_BASE_DIR = "knowledge_base/operating_systems"
 DB_DIR = os.getenv("PERSIST_DIRECTORY", "./vector_db")
 COLLECTION_NAME = "operating_systems"
 EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"
+RERANK_MODEL_NAME = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 
 # Supported document types and their subdirectories
 DOC_TYPES = {
@@ -122,8 +123,12 @@ def ingest_documents():
     # Note: If the collection exists, we reuse it.
     collection = chroma_client.get_or_create_collection(name=COLLECTION_NAME)
     
-    # 2. Load the embedding model
+    # 2. Load the embedding model and pre-download the reranker so it is
+    #    cached on disk before the UI is ever launched.
     embedding_model = load_embedding_model()
+    print(f"Pre-downloading/caching reranker model '{RERANK_MODEL_NAME}'...")
+    CrossEncoder(RERANK_MODEL_NAME)
+    print("Reranker model cached successfully.")
     
     all_chunks = []
     
