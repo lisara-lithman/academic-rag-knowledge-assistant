@@ -68,27 +68,25 @@ def load_rerank_model():
 
 
 def _is_rate_limit_error(e):
-    """Return True if the exception is an HTTP 429 rate-limit error from any LLM provider."""
-    err = str(e).lower()
-    return "429" in err or "rate limit" in err or "too many requests" in err or "ratelimit" in err
+    err_str = str(e).lower()
+    return "429" in err_str or "rate limit" in err_str or "quota" in err_str
 
 
-def call_with_retry(fn, max_retries=3, base_wait=5):
-    """
-    Call fn() and retry on rate-limit errors using exponential backoff.
-    Wait times: 5s → 10s → 20s between successive retries.
-    Raises the original exception if all retries are exhausted.
-    """
-    for attempt in range(max_retries):
+def call_with_retry(func, max_retries=3, initial_backoff=2):
+    """Executes a function with exponential backoff if a rate limit error is encountered."""
+    retries = 0
+    backoff = initial_backoff
+    while True:
         try:
-            return fn()
+            return func()
         except Exception as e:
-            if _is_rate_limit_error(e) and attempt < max_retries - 1:
-                wait = base_wait * (2 ** attempt)   # 5, 10, 20 seconds
-                print(f"⚠️  Rate limit hit. Waiting {wait}s before retry {attempt + 2}/{max_retries}...")
-                time.sleep(wait)
+            if _is_rate_limit_error(e) and retries < max_retries:
+                print(f"Rate limit hit. Retrying in {backoff} seconds...")
+                time.sleep(backoff)
+                retries += 1
+                backoff *= 2
             else:
-                raise
+                raise e
 
 
 def rewrite_query(query, history=None):
@@ -114,15 +112,18 @@ def rewrite_query(query, history=None):
         "Your task is to analyze the student's latest input in the context of the conversation history.\n\n"
         "ROUTING RULES:\n"
         "- Output 'REFINE' ONLY if the student asks to format, summarize, shorten, or clarify the EXACT SAME concept from the previous turn.\n"
-        "- Output 'SEARCH' if the student asks a new question OR introduces a new technical term/concept as a follow-up (e.g., 'What about semaphores?', 'Explain threads vs processes').\n"
+        "- Output 'SEARCH' if the student asks a new question OR introduces a new technical term/concept as a follow-up.\n"
         "- Output 'CHAT' only for greetings or purely conversational filler.\n\n"
         "REWRITING RULES (If SEARCH):\n"
         "- Expand messy, informal inputs into clean, formal search queries.\n"
-        "- Preserve all core concepts from the student's input (e.g. 'conditions').\n"
+        "- If the student's question is vague or broad (e.g., 'Explain memory management'), break it down into TWO specific sub-queries covering different aspects of the topic (e.g., allocation vs paging).\n"
+        "- If the question is already highly specific, just output one rewritten query.\n"
+        "- Preserve all core concepts from the student's input.\n"
         "- DO NOT hallucinate unrelated domains like databases or web development. Keep the focus strictly on Operating Systems.\n\n"
         "Respond EXACTLY in this format:\n"
         "DECISION: [SEARCH | REFINE | CHAT]\n"
-        "QUERY: [Your rewritten query, or the topic if REFINE]\n"
+        "QUERY1: [Your first rewritten query, or the topic if REFINE]\n"
+        "QUERY2: [Your second rewritten query if the topic is broad/ambiguous, otherwise omit this line]\n"
         "RESPONSE: [Only fill this if DECISION is CHAT — write a short, warm, natural conversational reply to the student]\n\n"
         f"{history_context}"
         f"Latest Student Input: \"{query}\""
@@ -148,20 +149,28 @@ def rewrite_query(query, history=None):
 
         # Parse decision, query and optional chat response
         decision = "SEARCH"
-        rewritten = query
+        rewritten_queries = []
         chat_response = ""
 
         for line in response_text.split("\n"):
             if line.startswith("DECISION:"):
                 decision = line.replace("DECISION:", "").strip()
-            elif line.startswith("QUERY:"):
-                rewritten = line.replace("QUERY:", "").strip()
+            elif line.startswith("QUERY1:"):
+                q1 = line.replace("QUERY1:", "").strip()
+                if q1 and q1 != "[Your first rewritten query, or the topic if REFINE]":
+                    rewritten_queries.append(q1)
+            elif line.startswith("QUERY2:"):
+                q2 = line.replace("QUERY2:", "").strip()
+                if q2 and q2 != "[Your second rewritten query if the topic is broad/ambiguous, otherwise omit this line]":
+                    rewritten_queries.append(q2)
             elif line.startswith("RESPONSE:"):
                 chat_response = line.replace("RESPONSE:", "").strip()
 
         # Clean quotes if model wrapped them
-        if rewritten.startswith('"') and rewritten.endswith('"'):
-            rewritten = rewritten[1:-1]
+        rewritten_queries = [q[1:-1] if q.startswith('"') and q.endswith('"') else q for q in rewritten_queries]
+
+        if not rewritten_queries:
+            rewritten_queries = [query]
 
         # Fallback safety
         if decision not in ["SEARCH", "REFINE", "CHAT"]:
@@ -175,12 +184,12 @@ def rewrite_query(query, history=None):
         if decision == "CHAT" and not chat_response:
             chat_response = "Hello! 👋 Feel free to ask me anything about Operating Systems & System Administration!"
 
-        print(f"User Input: '{query}' -> Decision: {decision} | Rewritten: '{rewritten}'")
-        return decision, rewritten, chat_response
+        print(f"User Input: '{query}' -> Decision: {decision} | Rewritten: {rewritten_queries}")
+        return decision, rewritten_queries, chat_response
 
     except Exception as e:
         print(f"Warning: Query rewrite failed ({e}). Defaulting to SEARCH.")
-        return "SEARCH", query, ""
+        return "SEARCH", [query], ""
 
 
 def retrieve_chunks(query, n_results=5):
@@ -281,29 +290,32 @@ def search_pipeline(query, history=None, top_k=6):
     """
     The full advanced retrieval pipeline:
     User Query -> Query Rewrite Decision -> Dual Search -> Merge & Deduplicate -> Rerank -> Top Chunks
-    Returns: (decision, rewritten_query, final_context, chat_response)
+    Returns: (decision, rewritten_queries, final_context, chat_response)
     chat_response is only populated when decision == 'CHAT'.
     """
     # 1. Rewrite user's query and get decision
-    decision, rewritten_query, chat_response = rewrite_query(query, history=history)
+    decision, rewritten_queries, chat_response = rewrite_query(query, history=history)
 
     if decision != "SEARCH":
         # No new search needed; return empty chunks and pass chat_response through
-        return decision, rewritten_query, [], chat_response
+        return decision, rewritten_queries, [], chat_response
 
     # 2. Retrieve using original query
-    chunks_original = retrieve_chunks(query, n_results=5)
+    all_chunks = retrieve_chunks(query, n_results=5)
 
-    # 3. Retrieve using rewritten query
-    chunks_rewritten = retrieve_chunks(rewritten_query, n_results=5)
-
-    # 4. Merge and deduplicate
-    merged_chunks = merge_and_deduplicate(chunks_original, chunks_rewritten)
+    # 3. Retrieve using all rewritten queries
+    for sub_query in rewritten_queries:
+        sub_chunks = retrieve_chunks(sub_query, n_results=5)
+        all_chunks = merge_and_deduplicate(all_chunks, sub_chunks)
 
     # 5. Rerank against the ORIGINAL user query
-    final_context = rerank_chunks(query, merged_chunks, top_k=top_k)
+    # If it generated multiple queries (ambiguous), boost top_k
+    if len(rewritten_queries) > 1:
+        top_k = 8
 
-    return decision, rewritten_query, final_context, ""
+    final_context = rerank_chunks(query, all_chunks, top_k=top_k)
+
+    return decision, rewritten_queries, final_context, ""
 
 
 if __name__ == "__main__":

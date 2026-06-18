@@ -2,7 +2,7 @@ import os
 import gradio as gr
 from dotenv import load_dotenv
 from google.genai import types
-from retrieval import search_pipeline, get_llm_client, load_embedding_model, load_rerank_model, call_with_retry
+from retrieval import search_pipeline, get_llm_client, load_embedding_model, get_cohere_client, call_with_retry
 
 load_dotenv()
 
@@ -35,9 +35,13 @@ def stream_grounded_answer(query, context_chunks, history=None, is_refinement=Fa
         "Answer the student's question using ONLY the provided lecture slides. Rules:\n"
         "1. Base your answer strictly on the context — no outside knowledge.\n"
         "2. If the context lacks information, say: 'I cannot find the answer in the module materials.'\n"
-        "3. Give a clear, structured explanation with bullet points and bold text where helpful.\n"
-        "4. Do NOT mention file names or page numbers inside your answer.\n"
-        "5. If asked for a diagram, use Mermaid.js (```mermaid blocks) or ASCII art."
+        "3. ALWAYS start by directly answering the question in 1-2 sentences before expanding.\n"
+        "4. Match your length and tone to the student's question:\n"
+        "   - Casual or simple questions (e.g. 'explain pcb simply', 'whats the diff between X and Y') → "
+        "answer in plain English, 2-4 sentences max. No headers or bullet points unless they genuinely help.\n"
+        "   - Formal or multi-part questions → use structured bullet points and bold key terms.\n"
+        "5. Do NOT mention file names or page numbers inside your answer.\n"
+        "6. If asked for a diagram, use Mermaid.js (```mermaid blocks) or ASCII art."
     )
     if is_refinement:
         system_prompt += (
@@ -48,7 +52,7 @@ def stream_grounded_answer(query, context_chunks, history=None, is_refinement=Fa
     user_prompt = (
         f"Context Materials:\n{context_text}\n\n"
         f"Student Question: \"{query}\"\n"
-        "Answer using ONLY the context materials above."
+        "Answer directly and concisely using ONLY the context materials above."
     )
 
     if provider == "groq":
@@ -84,6 +88,13 @@ def stream_grounded_answer(query, context_chunks, history=None, is_refinement=Fa
         for chunk in stream:
             if chunk.text:
                 yield chunk.text
+
+
+def generate_grounded_answer(query, context_chunks, history=None, is_refinement=False):
+    """Non-streaming wrapper around stream_grounded_answer for batch evaluation."""
+    return "".join(
+        stream_grounded_answer(query, context_chunks, history=history, is_refinement=is_refinement)
+    )
 
 
 def respond(user_message, history, last_chunks):
@@ -211,7 +222,7 @@ with gr.Blocks(
 if __name__ == "__main__":
     print("Pre-loading models into memory — this takes a few seconds...")
     load_embedding_model()
-    load_rerank_model()
+    get_cohere_client()
     print("Models loaded. Launching OSSA AI Knowledge Assistant UI…")
     demo.queue()
     demo.launch(server_name="127.0.0.1", server_port=7860)

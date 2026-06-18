@@ -16,3 +16,8 @@ pydantic
 gradio
 plotly
 pandas
+
+# Evaluation (RAGAS)
+ragas
+langchain-openai
+eval_type_backport

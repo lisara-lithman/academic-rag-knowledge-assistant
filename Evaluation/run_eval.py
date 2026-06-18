@@ -7,10 +7,12 @@ from retrieval import search_pipeline
 from ui import generate_grounded_answer
 
 # Accept dataset filename as argument, default to dataset2.json
-EVAL_DIR   = os.path.dirname(os.path.abspath(__file__))
-DATASET    = sys.argv[1] if len(sys.argv) > 1 else "dataset2.json"
-INPUT_PATH = os.path.join(EVAL_DIR, DATASET)
-OUTPUT_PATH = os.path.join(EVAL_DIR, DATASET.replace(".json", "_results.json"))
+# Optional second argument: custom output filename (to preserve historical records)
+EVAL_DIR    = os.path.dirname(os.path.abspath(__file__))
+DATASET     = sys.argv[1] if len(sys.argv) > 1 else "dataset2.json"
+OUT_NAME    = sys.argv[2] if len(sys.argv) > 2 else DATASET.replace(".json", "_results.json")
+INPUT_PATH  = os.path.join(EVAL_DIR, DATASET)
+OUTPUT_PATH = os.path.join(EVAL_DIR, OUT_NAME)
 
 
 def run():
@@ -26,7 +28,7 @@ def run():
         print(f"[{i+1}/{len(dataset)}] {query}")
 
         try:
-            decision, rewritten, chunks = search_pipeline(query, history=history)
+            decision, rewritten, chunks, _ = search_pipeline(query, history=history)
 
             answer = generate_grounded_answer(
                 query=query,

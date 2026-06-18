@@ -1,0 +1,442 @@
+[
+  {
+    "query": "whats the diff between preemptive and non preemptive",
+    "gold_answer": "In preemptive scheduling the OS can suspend a running process at any point to give the CPU to another process. In non-preemptive scheduling the process keeps the CPU until it finishes its entire execution or voluntarily gives it up.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 5
+      }
+    ],
+    "decision": "SEARCH",
+    "rewritten_query": [
+      "What are the key differences between preemptive and non-preemptive scheduling algorithms in Operating Systems?",
+      "How do preemptive scheduling algorithms interrupt and switch between processes, compared to non-preemptive scheduling algorithms?"
+    ],
+    "retrieved_chunks": [
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 5,
+        "score": 5.7338
+      },
+      {
+        "source": "Mid Revision.pdf",
+        "page": 2,
+        "score": 1.5895
+      },
+      {
+        "source": "OSSA_Tutorial_5.pdf",
+        "page": 1,
+        "score": 1.1215
+      },
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 16,
+        "score": 0.9391
+      }
+    ],
+    "generated_answer": "Preemptive scheduling allows the execution of a process in the CPU to be suspended at any point, whereas non-preemptive scheduling requires the process to complete its entire execution before the CPU can be allocated to another process.",
+    "category": "NOISY_QUESTION"
+  },
+  {
+    "query": "explain pcb simply",
+    "gold_answer": "A PCB (Process Control Block) is a data structure used by the OS to store all the key details about a process \u2014 things like its current state, process ID, program counter, CPU registers, and memory allocation.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_3.pdf",
+        "page": 9
+      },
+      {
+        "source": "OSSA_Lecture_3.pdf",
+        "page": 10
+      }
+    ],
+    "decision": "SEARCH",
+    "rewritten_query": [
+      "What is the purpose and structure of a Process Control Block (PCB) in an operating system?",
+      "How does a PCB interact with system resources such as memory and I/O devices?"
+    ],
+    "retrieved_chunks": [
+      {
+        "source": "OSSA_Lecture_3.pdf",
+        "page": 9,
+        "score": 3.3473
+      },
+      {
+        "source": "OSSA_Lecture_3.pdf",
+        "page": 10,
+        "score": 1.9409
+      }
+    ],
+    "generated_answer": "A Process Control Block (PCB) is like a container that stores essential details about a process. It keeps track of things like where the process is in its execution, what resources it's using, and how much time it's taken up.\n\nIn simpler terms, a PCB is like a passport for a process, containing all the necessary information about it to help the operating system manage it efficiently.",
+    "category": "NOISY_QUESTION"
+  },
+  {
+    "query": "i dont understand deadlocks can u explain what conditions needed",
+    "gold_answer": "A deadlock happens when four conditions hold at the same time: (1) Mutual exclusion \u2014 only one process can use a resource at a time; (2) Hold and wait \u2014 a process holds a resource and waits for more; (3) No preemption \u2014 resources cannot be forcibly taken away; (4) Circular wait \u2014 a chain of processes each waiting on the next.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_9.pdf",
+        "page": 6
+      }
+    ],
+    "decision": "SEARCH",
+    "rewritten_query": [
+      "What are the necessary conditions for a deadlock to occur in an operating system?",
+      "How do operating systems detect and prevent deadlocks?"
+    ],
+    "retrieved_chunks": [
+      {
+        "source": "2017-oct.pdf",
+        "page": 5,
+        "score": 2.8515
+      },
+      {
+        "source": "OSSA_Lecture_9.pdf",
+        "page": 14,
+        "score": 0.5674
+      }
+    ],
+    "generated_answer": "To have a deadlock in a system, four necessary conditions must be met: \n\n1. **Mutual Exclusion**: Resources must be held in a way that prevents other processes from accessing them.\n2. **Hold and Wait**: A process must be holding a resource and waiting for another resource.\n3. **No Preemption**: The operating system cannot take a resource away from a process.\n4. **Circular Wait**: A process is waiting for a resource held by another process, which in turn is waiting for a resource held by the first process.\n\nThese conditions are explained in more detail on Slide 2, specifically under the \"Deadlock Prevention\" section.",
+    "category": "NOISY_QUESTION"
+  },
+  {
+    "query": "starvation in scheduling? and how to fix",
+    "gold_answer": "Starvation occurs in priority scheduling when low-priority processes may never execute because higher-priority processes keep arriving. The solution is Aging \u2014 a technique where the priority of a waiting process is gradually increased over time so it eventually gets to run.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 16
+      }
+    ],
+    "decision": "SEARCH",
+    "rewritten_query": [
+      "What are the causes and effects of starvation in process scheduling in operating systems?",
+      "How can starvation in scheduling be prevented or mitigated in a real-world operating system implementation?"
+    ],
+    "retrieved_chunks": [
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 16,
+        "score": 1.5777
+      }
+    ],
+    "generated_answer": "**Starvation in Scheduling:**\nStarvation occurs when low-priority processes may never execute, even though they are still active.\n\n**Fixing Starvation:**\nAging is a solution to this problem, where the priority of a process increases with time. This ensures that low-priority processes will eventually get a chance to execute.",
+    "category": "NOISY_QUESTION"
+  },
+  {
+    "query": "what happens when two processes try to use the same data at the same time",
+    "gold_answer": "This creates a critical section problem. A critical section is a segment of code where shared data (like variables, buffers, or files) is being modified. If two processes enter their critical sections at the same time, they can corrupt the shared data. The OS must enforce mutual exclusion so only one process can be in its critical section at a time.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 11
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 9
+      }
+    ],
+    "decision": "SEARCH",
+    "rewritten_query": [
+      "What are the consequences of concurrent access to shared data by multiple processes in an operating system?",
+      "How does the operating system handle synchronization and conflict resolution in such scenarios?"
+    ],
+    "retrieved_chunks": [
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 11,
+        "score": 3.7291
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 8,
+        "score": 0.293
+      }
+    ],
+    "generated_answer": "If two processes try to use the same data at the same time, it can lead to a situation known as the critical section problem or a race condition. This can result in data inconsistency.",
+    "category": "NOISY_QUESTION"
+  },
+  {
+    "query": "How do I build a REST API in Python using Flask?",
+    "gold_answer": "I cannot find the answer in the module materials. This question is about web development which is not covered in the Operating Systems and System Administration module.",
+    "target_chunks": [],
+    "decision": "SEARCH",
+    "rewritten_query": [
+      "What are the key components and steps involved in building a REST API using Flask in Python?",
+      "How do I handle HTTP requests and responses, including error handling, in a Flask-based REST API?"
+    ],
+    "retrieved_chunks": [],
+    "generated_answer": "To build a REST API in Python using Flask, you can use the Flask-Restful library to create API endpoints.\n\nHere's a step-by-step guide:\n* Install Flask and Flask-Restful using pip: `pip install flask flask-restful`\n* Import the necessary libraries: `from flask import Flask, jsonify` and `from flask_restful import Api, Resource`\n* Create a Flask app instance: `app = Flask(__name__)`\n* Create an API instance: `api = Api(app)`\n* Define API endpoints using the `Resource` class\n* Use the `get`, `post`, `put`, and `delete` methods to handle HTTP requests\n* Use the `jsonify` function to return JSON responses\n\nHere's an example code snippet:\n```python\nfrom flask import Flask, jsonify\nfrom flask_restful import Api, Resource\n\napp = Flask(__name__)\napi = Api(app)\n\nclass User(Resource):\n    def get(self, id):\n        # Return a user object\n        return {'id': id, 'name': 'John Doe'}\n\napi.add_resource(User, '/users/<int:id>')\n\nif __name__ == '__main__':\n    app.run(debug=True)\n```",
+    "category": "OUT_OF_SCOPE"
+  },
+  {
+    "query": "What is the difference between SQL and NoSQL databases?",
+    "gold_answer": "I cannot find the answer in the module materials. Database management systems are not covered in this Operating Systems and System Administration module.",
+    "target_chunks": [],
+    "decision": "SEARCH",
+    "rewritten_query": [
+      "What are the key differences between relational databases (e.g., SQL) and non-relational databases (e.g., NoSQL) in the context of Operating Systems?",
+      "How do SQL and NoSQL databases handle memory management and caching in Operating Systems?"
+    ],
+    "retrieved_chunks": [],
+    "generated_answer": "**SQL and NoSQL databases differ in their data structure and querying methods.**\n\n* SQL databases use a fixed schema and support Structured Query Language (SQL) for querying data.\n* NoSQL databases use a flexible schema and support various data models, such as key-value, document, and graph databases, for querying data.",
+    "category": "OUT_OF_SCOPE"
+  },
+  {
+    "query": "What is the best way to study for exams?",
+    "gold_answer": "I cannot find the answer in the module materials. This question is not related to Operating Systems and System Administration.",
+    "target_chunks": [],
+    "decision": "CHAT",
+    "rewritten_query": [
+      "What is the best way to study for exams?"
+    ],
+    "retrieved_chunks": [],
+    "generated_answer": "I cannot find the answer in the module materials.",
+    "category": "OUT_OF_SCOPE"
+  },
+  {
+    "query": "What are the main scheduling algorithms?",
+    "gold_answer": "There are two scheduling domains covered in the module. For CPU scheduling, the main algorithms are FCFS, SJF, Priority Scheduling, and Round Robin. For disk scheduling, the main algorithms are FCFS, SSTF, SCAN, C-SCAN, LOOK, and C-LOOK.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 7
+      },
+      {
+        "source": "OSSA_Lecture_10.pdf",
+        "page": 10
+      }
+    ],
+    "decision": "SEARCH",
+    "rewritten_query": [
+      "What are the primary scheduling algorithms used in operating systems?",
+      "How do these algorithms prioritize tasks and manage system resources?"
+    ],
+    "retrieved_chunks": [
+      {
+        "source": "OSSA_Lecture_3.pdf",
+        "page": 13,
+        "score": 3.5885
+      },
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 23,
+        "score": 2.2341
+      },
+      {
+        "source": "OSSA_Lecture_10.pdf",
+        "page": 7,
+        "score": 2.1562
+      },
+      {
+        "source": "OSSA_Lecture_10.pdf",
+        "page": 8,
+        "score": 1.8396
+      },
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 3,
+        "score": 1.4527
+      },
+      {
+        "source": "OSSA_Lecture_5.pdf",
+        "page": 9,
+        "score": 0.9583
+      }
+    ],
+    "generated_answer": "The main scheduling algorithms are not explicitly mentioned in the provided context materials. However, it is mentioned that there are two main schedulers: Short-term scheduler (or CPU scheduler) and Long-term scheduler (or job scheduler).\n\nTo find the main scheduling algorithms, we need to refer to other context materials not provided here.",
+    "category": "AMBIGUOUS_QUESTION"
+  },
+  {
+    "query": "How does synchronization work between processes?",
+    "gold_answer": "Process synchronization is the mechanism that ensures orderly access to shared resources. The critical section must be protected using tools like semaphores. A semaphore is an integer variable that can only be accessed through two atomic operations: wait() and signal(), ensuring that only one process modifies shared data at a time.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 22
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 9
+      }
+    ],
+    "decision": "SEARCH",
+    "rewritten_query": [
+      "What are the mechanisms used for process synchronization in operating systems?",
+      "How do these mechanisms handle concurrency and prevent race conditions?"
+    ],
+    "retrieved_chunks": [
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 8,
+        "score": 2.844
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 35,
+        "score": 1.2234
+      },
+      {
+        "source": "2023-Nov.pdf",
+        "page": 2,
+        "score": 0.5188
+      }
+    ],
+    "generated_answer": "Synchronization between processes works by ensuring that only one process can manipulate shared data at a time, preventing a race condition. This is achieved through process synchronization, which involves mechanisms like monitors or semaphores.\n\nTo be more specific, monitors (as described on Slide 2) provide a high-level abstraction for process synchronization, allowing only one process to be active within the monitor at a time. Semaphores (as mentioned on Slide 3) are also used for synchronization, with operations like wait() and signal() controlling access to shared resources.",
+    "category": "AMBIGUOUS_QUESTION"
+  },
+  {
+    "query": "Explain how memory is managed in an OS",
+    "gold_answer": "Memory management in an OS involves tracking which parts of physical memory are in use. The CPU can only directly access memory (RAM) and registers. Techniques like paging divide memory into fixed-size frames and pages. Virtual memory extends this further by allowing processes that are not fully loaded in RAM to execute, loading pages on demand (demand paging).",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_11.pdf",
+        "page": 4
+      },
+      {
+        "source": "OSSA_Lecture_11.pdf",
+        "page": 27
+      }
+    ],
+    "decision": "SEARCH",
+    "rewritten_query": [
+      "What are the primary mechanisms used by an Operating System for memory allocation and deallocation?",
+      "How does an Operating System handle memory fragmentation and paging to optimize memory usage?"
+    ],
+    "retrieved_chunks": [
+      {
+        "source": "OSSA_Lecture_11.pdf",
+        "page": 7,
+        "score": 5.9102
+      },
+      {
+        "source": "OSSA_Lecture_2.pdf",
+        "page": 5,
+        "score": 3.7917
+      },
+      {
+        "source": "OSSA_Lecture_11.pdf",
+        "page": 12,
+        "score": 1.5607
+      }
+    ],
+    "generated_answer": "The OS manages memory by keeping track of which parts are being used and by whom, deciding which processes to load next when memory space becomes available, allocating and deallocating memory. This involves allocating a single continuous block of memory in RAM for each process, known as contiguous allocation.",
+    "category": "AMBIGUOUS_QUESTION"
+  },
+  {
+    "query": "can you make that shorter",
+    "gold_answer": "A deadlock requires four conditions: Mutual exclusion, Hold and wait, No preemption, and Circular wait \u2014 all must be present simultaneously.",
+    "target_chunks": [],
+    "decision": "REFINE",
+    "rewritten_query": [
+      "Deadlock conditions"
+    ],
+    "retrieved_chunks": [],
+    "generated_answer": "A deadlock occurs when four conditions hold: Mutual exclusion, Hold and wait, No preemption, and Circular wait.",
+    "category": "MULTI_TURN",
+    "expected_decision": "REFINE"
+  },
+  {
+    "query": "What about semaphores, how are they used?",
+    "gold_answer": "A semaphore is a synchronization tool represented by an integer variable (S). It can only be accessed through two atomic operations: wait() \u2014 which decrements S and blocks the process if S is 0 \u2014 and signal() \u2014 which increments S and wakes a waiting process.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 22
+      }
+    ],
+    "decision": "SEARCH",
+    "rewritten_query": [
+      "How are semaphores used in operating systems for synchronization and process coordination?",
+      "What are the key differences between semaphores and critical sections in terms of implementation and usage?"
+    ],
+    "retrieved_chunks": [
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 22,
+        "score": 3.9785
+      },
+      {
+        "source": "2015.pdf",
+        "page": 2,
+        "score": 3.3638
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 24,
+        "score": 3.2275
+      },
+      {
+        "source": "OSSA_Lecture_7.pdf",
+        "page": 34,
+        "score": 1.8169
+      },
+      {
+        "source": "2023-Nov-2.pdf",
+        "page": 3,
+        "score": 0.4585
+      }
+    ],
+    "generated_answer": "Semaphores are synchronization tools that provide a more sophisticated way for processes to synchronize their activities. They are implemented using two indivisible (atomic) operations: `wait()` and `signal()`, which can only be accessed via an integer variable `S`. \n\nSemaphores are used to provide synchronization for concurrent process execution, but incorrect use of semaphore operations can lead to problems such as deadlock and starvation.",
+    "category": "MULTI_TURN",
+    "expected_decision": "SEARCH"
+  },
+  {
+    "query": "summarize that as bullet points",
+    "gold_answer": "Demand Paging summary:\n- Pages loaded into RAM only when needed\n- Avoids loading the entire program at startup\n- If a required page is missing, a page fault occurs\n- OS then loads the page from disk into a free frame",
+    "target_chunks": [],
+    "decision": "REFINE",
+    "rewritten_query": [
+      "Demand paging"
+    ],
+    "retrieved_chunks": [],
+    "generated_answer": "* **Demand Paging**:\n  * Pages are loaded into RAM only when needed.\n  * If a page is not in RAM, a **page fault** occurs.\n  * The OS loads the required page from disk.",
+    "category": "MULTI_TURN",
+    "expected_decision": "REFINE"
+  },
+  {
+    "query": "Now explain the difference between threads and processes",
+    "gold_answer": "A process is a heavyweight unit of execution with its own dedicated memory space and resources. A thread is a lightweight unit of CPU utilization that lives inside a process. Multiple threads within the same process share its code, data, and resources, but each thread has its own program counter, registers, and stack. Thread creation is faster and cheaper than process creation.",
+    "target_chunks": [
+      {
+        "source": "OSSA_Lecture_4.pdf",
+        "page": 4
+      },
+      {
+        "source": "OSSA_Lecture_4.pdf",
+        "page": 5
+      }
+    ],
+    "decision": "SEARCH",
+    "rewritten_query": [
+      "What are the key differences between threads and processes in the context of operating systems?",
+      "How do threads and processes interact with system resources such as memory and I/O devices?"
+    ],
+    "retrieved_chunks": [
+      {
+        "source": "OSSA_Lecture_4.pdf",
+        "page": 4,
+        "score": 4.2508
+      },
+      {
+        "source": "OSSA_Lecture_4.pdf",
+        "page": 6,
+        "score": 2.7194
+      },
+      {
+        "source": "OSSA_Tutorial_4.pdf",
+        "page": 1,
+        "score": 2.337
+      },
+      {
+        "source": "OSSA_Lecture_4.pdf",
+        "page": 9,
+        "score": 1.1619
+      }
+    ],
+    "generated_answer": "A thread represents a single, independent stream of execution within a process/application, whereas a process is a separate entity with its own memory space and resources. \n\nIn more detail, the key differences between threads and processes are:\n\n* **Memory Space**: Threads share the same memory space as the process, whereas processes have their own separate memory space.\n* **Creation Overhead**: Creating a new thread is cheaper and has lower overhead than creating a new process.\n* **Context Switching**: Switching between threads has lower overhead than switching between processes.\n* **Resource Sharing**: Threads share resources of the process, whereas processes have their own resources.\n* **Independence**: Threads are generally invisible from outside the process, whereas processes are separate entities with their own identity.",
+    "category": "MULTI_TURN",
+    "expected_decision": "SEARCH"
+  }
+]

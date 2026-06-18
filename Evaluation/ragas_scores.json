@@ -1,0 +1,55 @@
+{
+  "project": "Academic RAG Knowledge Assistant",
+  "judge_llm": "OpenAI GPT-4o-mini",
+  "judge_embeddings": "OpenAI text-embedding-3-small",
+  "history": [
+    {
+      "iteration": "Baseline (Phase 5)",
+      "dataset": "dataset3_fixed_results.json",
+      "run_date": "2026-06-18 17:30",
+      "scores": {
+        "faithfulness": 0.864,
+        "answer_relevancy": 0.587,
+        "context_precision": 0.851,
+        "context_recall": 0.683,
+        "overall_ragas": 0.746
+      }
+    },
+    {
+      "iteration": "Iteration 1 (Prompt Fix for Verbosity)",
+      "dataset": "dataset3_prompt_fix_results.json",
+      "run_date": "2026-06-18 17:45",
+      "scores": {
+        "faithfulness": 0.785,
+        "answer_relevancy": 0.800,
+        "context_precision": 0.881,
+        "context_recall": 0.583,
+        "overall_ragas": 0.762
+      }
+    },
+    {
+      "iteration": "Iteration 2 (Dual-Query Fix for Ambiguity)",
+      "dataset": "dataset3_ambiguous_fix_results.json",
+      "run_date": "2026-06-18 18:08",
+      "scores": {
+        "faithfulness": 0.929,
+        "answer_relevancy": 0.735,
+        "context_precision": 0.867,
+        "context_recall": 0.725,
+        "overall_ragas": 0.814
+      }
+    },
+    {
+      "iteration": "Iteration 3 (Cohere API Rerank Upgrade)",
+      "dataset": "dataset3_iter3_cohere_rerank_results.json",
+      "run_date": "2026-06-18 19:15",
+      "scores": {
+        "faithfulness": 0.949,
+        "answer_relevancy": 0.683,
+        "context_precision": 0.844,
+        "context_recall": 0.700,
+        "overall_ragas": 0.794
+      }
+    }
+  ]
+}
