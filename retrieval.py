@@ -66,9 +66,9 @@ def load_rerank_model():
     return _rerank_model
 
 
-def _is_rate_limit_error(e):
+def _is_retryable_error(e):
     err_str = str(e).lower()
-    return "429" in err_str or "rate limit" in err_str or "quota" in err_str
+    return any(x in err_str for x in ["429", "rate limit", "quota", "timeout", "connection", "500", "502", "503", "504"])
 
 
 def call_with_retry(func, max_retries=3, initial_backoff=2):
@@ -79,8 +79,8 @@ def call_with_retry(func, max_retries=3, initial_backoff=2):
         try:
             return func()
         except Exception as e:
-            if _is_rate_limit_error(e) and retries < max_retries:
-                print(f"Rate limit hit. Retrying in {backoff} seconds...")
+            if _is_retryable_error(e) and retries < max_retries:
+                print(f"Network/API error hit ({e}). Retrying in {backoff} seconds...")
                 time.sleep(backoff)
                 retries += 1
                 backoff *= 2
