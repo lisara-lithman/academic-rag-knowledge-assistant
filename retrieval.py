@@ -22,30 +22,22 @@ _llm_client = None
 _llm_provider = None
 
 
+from openai import OpenAI
+
 def get_llm_client():
-    """Initialize either Groq or Gemini client based on environment variables."""
+    """Initialize the LLM client (OpenAI)."""
     global _llm_client, _llm_provider
     if _llm_client is not None:
         return _llm_client, _llm_provider
 
-    groq_key = os.getenv("GROQ_API_KEY")
-    gemini_key = os.getenv("GEMINI_API_KEY")
+    openai_key = os.getenv("OPENAI_API_KEY")
 
-    if groq_key and not groq_key.startswith("your_"):
-        print("Using Groq API for LLM reasoning...")
-        # Groq client automatically picks up GROQ_API_KEY from environment
-        _llm_client = Groq()
-        _llm_provider = "groq"
-    elif gemini_key and not gemini_key.startswith("your_"):
-        print("Using Gemini API for LLM reasoning...")
-        # Gemini client automatically picks up GEMINI_API_KEY from environment
-        _llm_client = genai.Client()
-        _llm_provider = "gemini"
+    if openai_key:
+        print("Using OpenAI API for LLM reasoning...")
+        _llm_client = OpenAI(api_key=openai_key)
+        _llm_provider = "openai"
     else:
-        raise ValueError(
-            "No valid API keys found in .env! "
-            "Please configure either GROQ_API_KEY or GEMINI_API_KEY."
-        )
+        raise ValueError("OPENAI_API_KEY not found in .env!")
 
     return _llm_client, _llm_provider
 
@@ -138,19 +130,13 @@ def rewrite_query(query, history=None):
 
     try:
         def _call_llm():
-            if provider == "groq":
+            if provider == "openai":
                 completion = client.chat.completions.create(
-                    model="llama-3.1-8b-instant",
+                    model="gpt-4o",
                     messages=[{"role": "user", "content": prompt}],
                     temperature=0.0
                 )
                 return completion.choices[0].message.content.strip()
-            elif provider == "gemini":
-                response = client.models.generate_content(
-                    model='gemini-2.5-flash',
-                    contents=prompt
-                )
-                return response.text.strip()
 
         response_text = call_with_retry(_call_llm)
 

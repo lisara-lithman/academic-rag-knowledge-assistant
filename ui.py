@@ -32,14 +32,15 @@ def stream_grounded_answer(query, context_chunks, history=None, is_refinement=Fa
     system_prompt = (
         "You are an expert, friendly AI teaching assistant for the university module "
         "'Operating Systems and System Administration'.\n\n"
-        "Answer the student's question using ONLY the provided lecture slides. Rules:\n"
-        "1. Base your answer strictly on the context — no outside knowledge.\n"
-        "2. If the context lacks information, say: 'I cannot find the answer in the module materials.'\n"
+        "Rules for answering the student's question:\n"
+        "1. Prioritize using the provided lecture slides as your main source of truth.\n"
+        "2. If the context materials lack the necessary information, you MAY use your own "
+        "expert knowledge of Operating Systems to answer the question. However, you MUST explicitly state: "
+        "'*The lecture slides do not fully cover this, but generally speaking...*' so the student knows it's outside material.\n"
         "3. ALWAYS start by directly answering the question in 1-2 sentences before expanding.\n"
         "4. Match your length and tone to the student's question:\n"
-        "   - Casual or simple questions (e.g. 'explain pcb simply', 'whats the diff between X and Y') → "
-        "answer in plain English, 2-4 sentences max. No headers or bullet points unless they genuinely help.\n"
-        "   - Formal or multi-part questions → use structured bullet points and bold key terms.\n"
+        "   - Casual questions → plain English, 2-4 sentences max.\n"
+        "   - Formal questions → use structured bullet points and bold key terms.\n"
         "5. Do NOT mention file names or page numbers inside your answer.\n"
         "6. If asked for a diagram, use Mermaid.js (```mermaid blocks) or ASCII art."
     )
@@ -52,10 +53,10 @@ def stream_grounded_answer(query, context_chunks, history=None, is_refinement=Fa
     user_prompt = (
         f"Context Materials:\n{context_text}\n\n"
         f"Student Question: \"{query}\"\n"
-        "Answer directly and concisely using ONLY the context materials above."
+        "Answer directly and concisely, prioritizing the context materials but using outside knowledge if necessary."
     )
 
-    if provider == "groq":
+    if provider == "openai":
         messages = [{"role": "system", "content": system_prompt}]
         if history:
             for u, b in history:
@@ -64,30 +65,13 @@ def stream_grounded_answer(query, context_chunks, history=None, is_refinement=Fa
         messages.append({"role": "user", "content": user_prompt})
         stream = call_with_retry(
             lambda: client.chat.completions.create(
-                model="llama-3.1-8b-instant", messages=messages, temperature=0.2, stream=True
+                model="gpt-4o", messages=messages, temperature=0.2, stream=True
             )
         )
         for chunk in stream:
             delta = chunk.choices[0].delta.content
             if delta:
                 yield delta
-
-    elif provider == "gemini":
-        contents = []
-        if history:
-            for u, b in history:
-                if u: contents.append(types.Content(role="user",  parts=[types.Part.from_text(text=u)]))
-                if b: contents.append(types.Content(role="model", parts=[types.Part.from_text(text=b)]))
-        contents.append(types.Content(role="user", parts=[types.Part.from_text(text=user_prompt)]))
-        cfg = types.GenerateContentConfig(system_instruction=system_prompt, temperature=0.2)
-        stream = call_with_retry(
-            lambda: client.models.generate_content_stream(
-                model='gemini-2.5-flash', contents=contents, config=cfg
-            )
-        )
-        for chunk in stream:
-            if chunk.text:
-                yield chunk.text
 
 
 def generate_grounded_answer(query, context_chunks, history=None, is_refinement=False):
