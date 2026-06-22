@@ -106,17 +106,8 @@ def respond(user_message, history, last_chunks):
         chunks = new_chunks
     elif decision == "SEARCH":
         # SEARCH was performed but every chunk scored below the relevance
-        # threshold — the query is out of scope. Skip the LLM entirely.
-        out_of_scope_msg = (
-            "I'm sorry, I couldn't find anything relevant to that question "
-            "in the OSSA module materials. Please try asking about topics covered "
-            "in the module, such as processes, scheduling, memory management, "
-            "deadlocks, or file systems."
-        )
-        history = history + [(user_message, out_of_scope_msg)]
-        no_sources = "<p style='color:#64748b;font-style:italic;'>No relevant slides found for this query.</p>"
-        yield "", history, no_sources, last_chunks
-        return
+        # threshold. Pass empty chunks to the LLM so it can answer using its own knowledge.
+        chunks = []
     else:
         chunks = last_chunks
 
