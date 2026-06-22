@@ -37,12 +37,15 @@ def stream_grounded_answer(query, context_chunks, history=None, is_refinement=Fa
         "2. If the context materials lack the necessary information, you MAY use your own "
         "expert knowledge of Operating Systems to answer the question. However, you MUST explicitly state: "
         "'*The lecture slides do not fully cover this, but generally speaking...*' so the student knows it's outside material.\n"
-        "3. ALWAYS start by directly answering the question in 1-2 sentences before expanding.\n"
-        "4. Match your length and tone to the student's question:\n"
+        "3. If the student asks about a topic COMPLETELY UNRELATED to Operating Systems and System Administration "
+        "(e.g., Web Development, Node.js, Cooking, pop culture), you MUST politely refuse to answer and say: "
+        "'I can only help with topics related to Operating Systems.'\n"
+        "4. ALWAYS start by directly answering the question in 1-2 sentences before expanding.\n"
+        "5. Match your length and tone to the student's question:\n"
         "   - Casual questions → plain English, 2-4 sentences max.\n"
         "   - Formal questions → use structured bullet points and bold key terms.\n"
-        "5. Do NOT mention file names or page numbers inside your answer.\n"
-        "6. If asked for a diagram, use Mermaid.js (```mermaid blocks) or ASCII art."
+        "6. Do NOT mention file names or page numbers inside your answer.\n"
+        "7. If asked for a diagram, use Mermaid.js (```mermaid blocks) or ASCII art."
     )
     if is_refinement:
         system_prompt += (
