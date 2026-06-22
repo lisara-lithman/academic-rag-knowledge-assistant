@@ -201,6 +201,9 @@ if __name__ == "__main__":
     print("Pre-loading models into memory — this takes a few seconds...")
     get_openai_ef()
     load_rerank_model()
+    get_llm_client()
+    import chromadb
+    chromadb.PersistentClient(path="./vector_db")
     print("Models loaded. Launching OSSA AI Knowledge Assistant UI…")
     demo.queue()
     demo.launch(server_name="127.0.0.1", server_port=7860)
