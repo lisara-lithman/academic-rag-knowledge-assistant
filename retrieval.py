@@ -1,21 +1,22 @@
 import os
 import time
 import chromadb
+import chromadb.utils.embedding_functions as embedding_functions
 from dotenv import load_dotenv
 from google import genai
 from groq import Groq
-from sentence_transformers import SentenceTransformer, CrossEncoder
+from sentence_transformers import CrossEncoder
 
 # Load configurations
 load_dotenv()
 
 DB_DIR = os.getenv("PERSIST_DIRECTORY", "./vector_db")
 COLLECTION_NAME = "operating_systems"
-EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"
+EMBEDDING_MODEL_NAME = "text-embedding-3-large"
 RERANK_MODEL_NAME = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 
 # Global model caches
-_embedding_model = None
+_openai_ef = None
 _rerank_model = None
 _llm_client = None
 _llm_provider = None
@@ -49,13 +50,19 @@ def get_llm_client():
     return _llm_client, _llm_provider
 
 
-def load_embedding_model():
-    """Load the local sentence-transformer embedding model (lazy-loaded)."""
-    global _embedding_model
-    if _embedding_model is None:
-        print("Loading embedding model...")
-        _embedding_model = SentenceTransformer(EMBEDDING_MODEL_NAME)
-    return _embedding_model
+def get_openai_ef():
+    """Get the OpenAI Embedding Function for ChromaDB (lazy-loaded)."""
+    global _openai_ef
+    if _openai_ef is None:
+        print("Loading OpenAI embedding function...")
+        openai_key = os.getenv("OPENAI_API_KEY")
+        if not openai_key:
+            raise ValueError("OPENAI_API_KEY not found in .env!")
+        _openai_ef = embedding_functions.OpenAIEmbeddingFunction(
+            api_key=openai_key,
+            model_name=EMBEDDING_MODEL_NAME
+        )
+    return _openai_ef
 
 
 def load_rerank_model():
@@ -194,18 +201,18 @@ def rewrite_query(query, history=None):
 
 def retrieve_chunks(query, n_results=5):
     """Embed the query and retrieve top-K matching chunks from ChromaDB."""
-    embedding_model = load_embedding_model()
+    openai_ef = get_openai_ef()
 
     # 1. Connect to ChromaDB
     chroma_client = chromadb.PersistentClient(path=DB_DIR)
-    collection = chroma_client.get_collection(name=COLLECTION_NAME)
+    collection = chroma_client.get_collection(
+        name=COLLECTION_NAME,
+        embedding_function=openai_ef
+    )
 
-    # 2. Embed the query vector
-    query_vector = embedding_model.encode(query).tolist()
-
-    # 3. Query ChromaDB
+    # 2. Query ChromaDB directly with text (Chroma handles embedding via openai_ef)
     results = collection.query(
-        query_embeddings=[query_vector],
+        query_texts=[query],
         n_results=n_results,
         include=['documents', 'metadatas']
     )

@@ -16,7 +16,7 @@
       }
     },
     {
-      "iteration": "Iteration 1 (Prompt Fix for Verbosity)",
+      "iteration": "Iteration 1 (Prompt Fix)",
       "dataset": "dataset3_prompt_fix_results.json",
       "run_date": "2026-06-18 17:45",
       "scores": {
@@ -28,7 +28,7 @@
       }
     },
     {
-      "iteration": "Iteration 2 (Dual-Query Fix for Ambiguity)",
+      "iteration": "Iteration 2 (Dual-Query Fix)",
       "dataset": "dataset3_ambiguous_fix_results.json",
       "run_date": "2026-06-18 18:08",
       "scores": {
@@ -40,7 +40,7 @@
       }
     },
     {
-      "iteration": "Iteration 3 (Cohere API Rerank Upgrade)",
+      "iteration": "Iteration 3 (Cohere Rerank)",
       "dataset": "dataset3_iter3_cohere_rerank_results.json",
       "run_date": "2026-06-18 19:15",
       "scores": {
@@ -49,6 +49,54 @@
         "context_precision": 0.844,
         "context_recall": 0.700,
         "overall_ragas": 0.794
+      }
+    },
+    {
+      "iteration": "Iteration 4 (OpenAI Embedder)",
+      "dataset": "dataset3_iter4_openai_embed_results.json",
+      "run_date": "2026-06-22 22:21",
+      "scores": {
+        "faithfulness": 0.935,
+        "answer_relevancy": 0.696,
+        "context_precision": 0.874,
+        "context_recall": 0.725,
+        "overall_ragas": 0.808
+      }
+    },
+    {
+      "iteration": "Iteration 5 (GPT-4o LLM)",
+      "dataset": "dataset3_iter5_gpt4o_results.json",
+      "run_date": "2026-06-22 22:33",
+      "scores": {
+        "faithfulness": 0.857,
+        "answer_relevancy": 0.709,
+        "context_precision": 0.872,
+        "context_recall": 0.708,
+        "overall_ragas": 0.787
+      }
+    },
+    {
+      "iteration": "Iteration 6 (GPT-4o Strict Prompt)",
+      "dataset": "dataset3_iter6_gpt4o_strict_results.json",
+      "run_date": "2026-06-22 23:01",
+      "scores": {
+        "faithfulness": 0.852,
+        "answer_relevancy": 0.720,
+        "context_precision": 0.874,
+        "context_recall": 0.750,
+        "overall_ragas": 0.799
+      }
+    },
+    {
+      "iteration": "Iteration 7 (Semantic Chunking)",
+      "dataset": "dataset3_iter7_semantic_chunking_results.json",
+      "run_date": "2026-06-22 23:30",
+      "scores": {
+        "faithfulness": 0.887,
+        "answer_relevancy": 0.739,
+        "context_precision": 0.892,
+        "context_recall": 0.808,
+        "overall_ragas": 0.832
       }
     }
   ]

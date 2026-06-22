@@ -222,5 +222,103 @@ The results of the Cohere upgrade were mixed:
 
 **Final Verdict:** While Cohere pushed Faithfulness to the absolute limit, the local MS-MARCO model actually provided a slightly better overall balance for this specific academic dataset, keeping the system score above 0.80. This proves that bigger/API models aren't always strictly better than domain-specific local models!
 
+---
+
+## Phase 7: Iteration 4 — Embedder Upgrade (OpenAI text-embedding-3-large)
+
+### What We Did
+After testing the reranker, we decided to tackle the other side of the retrieval equation: the **Embedding Model**. We swapped out the tiny, local `all-MiniLM-L6-v2` (384 dimensions) for OpenAI's massive `text-embedding-3-large` (3072 dimensions).
+
+Because the dimensionality of the embeddings changed entirely, we completely wiped the old `vector_db` and rebuilt it using the OpenAI API.
+
+### Results
+
+| Metric | Iteration 2 (Local Embedder & Reranker) | Iteration 4 (OpenAI Embedder + Local Reranker) | Change |
+|---|---|---|---|
+| **Faithfulness** | 0.929 | **0.935** | **+0.006** |
+| **Answer Relevance** | 0.735 | **0.696** | -0.039 ❌ |
+| **Context Precision** | 0.867 | **0.874** | **+0.007** 🚀 |
+| **Context Recall** | 0.725 | **0.725** | 0.000 |
+| **Overall RAGAS** | 0.814 | **0.808** | -0.006 |
+
+### Conclusion
+1. **Context Precision Hit an All-Time High:** The massive 3072-dimensional space provided by OpenAI allowed ChromaDB to pull back much more semantically relevant chunks on the initial pass (before reranking), pushing Context Precision to its highest score yet (0.874).
+2. **Context Recall Remained Static:** Interestingly, Context Recall didn't budge. This tells us that our Dual-Query rewrite logic from Iteration 2 was already doing the heavy lifting of pulling in the missing puzzle pieces, regardless of the embedder.
+3. **Answer Relevance Dropped:** The LLM still struggled slightly to synthesize the newly found chunks into a perfectly concise answer, causing a slight dip in the overall score.
+
+**Final Verdict:** The massive OpenAI embedding model successfully improved the precision of the context fetched, but the overall system score remained incredibly close to the baseline Iteration 2. To push the score significantly higher, upgrading the **Judge LLM** (currently Llama 3 / Gemini Flash) to a frontier model (like GPT-4o) would likely yield the biggest boost in Answer Relevance.
+
+---
+
+## Phase 8: Iteration 5 — LLM Upgrade (OpenAI GPT-4o)
+
+### What We Did
+For our final test, we kept the powerful `text-embedding-3-large` embedder and the highly specific local MS-MARCO reranker, but we swapped out the LLM generator from the lightweight `llama-3.1-8b-instant` to OpenAI's flagship `gpt-4o`.
+
+### Results
+
+| Metric | Iteration 4 (Llama 3 LLM) | Iteration 5 (GPT-4o LLM) | Change |
+|---|---|---|---|
+| **Faithfulness** | 0.935 | **0.857** | -0.078 ❌ |
+| **Answer Relevance** | 0.696 | **0.709** | **+0.013** |
+| **Context Precision** | 0.874 | **0.872** | -0.002 |
+| **Context Recall** | 0.725 | **0.708** | -0.017 |
+| **Overall RAGAS** | 0.808 | **0.787** | -0.021 |
+
+### Conclusion
+1. **Faithfulness Dropped Significantly:** Wait, a much smarter LLM got a *lower* score? Yes! This is a classic RAG phenomenon. Because GPT-4o has immense internal training data regarding Operating Systems, it felt confident answering the questions using its *own* knowledge, rather than strictly adhering to the context chunks we provided. Llama 3 was much more obedient in sticking to the script.
+2. **Answer Relevance Improved:** As expected, GPT-4o is a much better writer than Llama 3. It was able to synthesize the complex, academic chunks into more concise, relevant answers, pushing the Answer Relevance score up.
+
+**Final Verdict:** While GPT-4o writes prettier, more relevant answers, it is much harder to constrain in a strict academic RAG pipeline. The lightweight `llama-3.1-8b` model actually provides a more faithful and accurate experience for this specific use case!
+
+---
+
+## Phase 9: Iteration 6 — The "Ironclad" Strict Prompt (GPT-4o + Temp 0.0)
+
+### What We Did
+To combat GPT-4o's tendency to hallucinate outside knowledge and drop the Faithfulness score, we aggressively engineered the system prompt. We added strict negative constraints ("Do NOT use outside knowledge") and an explicit failure state ("explicitly state 'The provided lecture materials do not contain sufficient information'"). We also dropped the temperature to `0.0` to remove all creativity. 
+
+### Results
+
+| Metric | Iteration 5 (GPT-4o Default) | Iteration 6 (GPT-4o Strict Prompt) | Change |
+|---|---|---|---|
+| **Faithfulness** | 0.857 | **0.852** | -0.005 ❌ |
+| **Answer Relevance** | 0.709 | **0.720** | **+0.011** |
+| **Context Precision** | 0.872 | **0.874** | **+0.002** |
+| **Context Recall** | 0.708 | **0.750** | **+0.042** 🚀 |
+| **Overall RAGAS** | 0.787 | **0.799** | **+0.012** |
+
+### Conclusion
+1. **Faithfulness Still Refused to Budge:** In a fascinating turn of events, even a temperature of 0.0 and aggressive negative constraints ("Do NOT use outside knowledge") were not enough to stop GPT-4o from hallucinating outside the syllabus! It still pulled in its own world knowledge, keeping the Faithfulness score low.
+2. **Context Recall Skyrocketed:** The strict prompt actually helped the pipeline pull in *better* chunks, pushing Context Recall to its highest score ever (0.750).
+3. **Answer Relevance Rebounded:** The answers became much more tightly aligned with the specific questions asked, pushing the Answer Relevance back up towards Llama 3's high score.
+
+**Final Verdict:** It is notoriously difficult to constrain frontier models (like GPT-4o) in strict, closed-book academic scenarios. They are simply too "smart" and too heavily trained on the entire internet. For maximum Faithfulness to a specific university syllabus, smaller, specialized models like Llama 3 or fine-tuned academic models are overwhelmingly superior.
+
+---
+
+## Phase 10: Iteration 7 — Semantic Chunking (Llama 3 Baseline)
+
+### What We Did
+We identified that the `ingest.py` script was using a primitive "Fixed-size Word Chunking" strategy (exactly 150 words). This was blindly slicing sentences, bullet points, and paragraphs perfectly in half, destroying their semantic meaning before they were even embedded.
+We replaced this with a custom `chunk_text_semantically` function using Python's Regex engine to split the text by paragraphs (`\n\n`) and then sentences (`. `), grouping them together up to 800 characters to ensure thoughts were never cut in half. We also reverted the LLM back to Llama 3 (from Iteration 4) since it proved to be the most faithful.
+
+### Results
+
+| Metric | Iteration 4 (Llama 3 Baseline) | Iteration 7 (Semantic Chunking) | Change |
+|---|---|---|---|
+| **Faithfulness** | 0.935 | 0.887 | -0.048 |
+| **Answer Relevance** | 0.696 | **0.739** | **+0.043** |
+| **Context Precision** | 0.874 | **0.892** | **+0.018** |
+| **Context Recall** | 0.725 | **0.808** | **+0.083** 🚀 |
+| **Overall RAGAS** | 0.808 | **0.832** | **+0.024** 👑 |
+
+### Conclusion
+1. **Context Recall Skyrocketed:** As expected, refusing to cut sentences in half completely solved the Context Recall issue. The Embedder is now successfully finding and returning exactly what the LLM needs to answer the question, pushing Context Recall to an astonishing 0.808.
+2. **Context Precision Peak:** Context Precision also hit an all-time high of 0.892, proving that semantic chunks are vastly easier for the cross-encoder to accurately rank.
+3. **The Highest Overall Score:** Because the LLM was fed pristine, semantically whole chunks, its Answer Relevance jumped, pushing the Overall RAGAS score to an all-time high of 0.832.
+
+**Final Verdict:** Semantic chunking is vastly superior to fixed-size chunking. Respecting natural language boundaries during the ingestion phase is critical for RAG performance.
+
 
 

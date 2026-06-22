@@ -2,7 +2,7 @@ import os
 import gradio as gr
 from dotenv import load_dotenv
 from google.genai import types
-from retrieval import search_pipeline, get_llm_client, load_embedding_model, get_cohere_client, call_with_retry
+from retrieval import search_pipeline, get_llm_client, get_openai_ef, load_rerank_model, call_with_retry
 
 load_dotenv()
 
@@ -221,8 +221,8 @@ with gr.Blocks(
 
 if __name__ == "__main__":
     print("Pre-loading models into memory — this takes a few seconds...")
-    load_embedding_model()
-    get_cohere_client()
+    get_openai_ef()
+    load_rerank_model()
     print("Models loaded. Launching OSSA AI Knowledge Assistant UI…")
     demo.queue()
     demo.launch(server_name="127.0.0.1", server_port=7860)

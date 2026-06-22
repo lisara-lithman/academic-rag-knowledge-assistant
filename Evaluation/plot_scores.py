@@ -36,6 +36,14 @@ def main():
              iter_name = "Iteration 2\n(Dual-Query)"
         elif "Cohere" in entry["iteration"]:
              iter_name = "Iteration 3\n(Cohere Reranker)"
+        elif "OpenAI" in entry["iteration"]:
+             iter_name = "Iteration 4\n(OpenAI Embedder)"
+        elif "GPT-4o LLM" in entry["iteration"]:
+             iter_name = "Iteration 5\n(GPT-4o LLM)"
+        elif "Strict" in entry["iteration"]:
+             iter_name = "Iteration 6\n(Strict Prompt)"
+        elif "Semantic" in entry["iteration"]:
+             iter_name = "Iteration 7\n(Semantic Chunk)"
              
         iterations.append(iter_name)
         scores = entry["scores"]

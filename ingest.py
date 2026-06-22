@@ -2,8 +2,9 @@ import os
 import glob
 import pypdf
 import chromadb
+import chromadb.utils.embedding_functions as embedding_functions
 from dotenv import load_dotenv
-from sentence_transformers import SentenceTransformer, CrossEncoder
+from sentence_transformers import CrossEncoder
 
 # Load environment variables (.env)
 load_dotenv()
@@ -12,7 +13,7 @@ load_dotenv()
 KNOWLEDGE_BASE_DIR = "knowledge_base/operating_systems"
 DB_DIR = os.getenv("PERSIST_DIRECTORY", "./vector_db")
 COLLECTION_NAME = "operating_systems"
-EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"
+EMBEDDING_MODEL_NAME = "text-embedding-3-large"
 RERANK_MODEL_NAME = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 
 # Supported document types and their subdirectories
@@ -23,31 +24,59 @@ DOC_TYPES = {
     "past_papers": "past_paper"
 }
 
-def load_embedding_model():
-    """Load the local sentence-transformer model."""
-    print(f"Loading embedding model '{EMBEDDING_MODEL_NAME}'...")
-    return SentenceTransformer(EMBEDDING_MODEL_NAME)
+def get_openai_ef():
+    """Get the OpenAI Embedding Function for ChromaDB."""
+    openai_key = os.getenv("OPENAI_API_KEY")
+    if not openai_key:
+        raise ValueError("OPENAI_API_KEY not found in .env!")
+    return embedding_functions.OpenAIEmbeddingFunction(
+        api_key=openai_key,
+        model_name=EMBEDDING_MODEL_NAME
+    )
 
-def chunk_text_by_words(text, chunk_size=150, chunk_overlap=30):
+import re
+
+def chunk_text_semantically(text, max_chars=800):
     """
-    Split text into chunks based on word count.
-    This helps keep semantic contexts (like sentences) intact
-    without splitting words in half.
+    Split text semantically into paragraphs and sentences.
+    Groups sentences together up to max_chars to keep semantic context intact.
     """
-    words = text.split()
     chunks = []
+    current_chunk = ""
     
-    if not words:
-        return chunks
-        
-    step = chunk_size - chunk_overlap
-    for i in range(0, len(words), step):
-        chunk_words = words[i:i + chunk_size]
-        chunks.append(" ".join(chunk_words))
-        # Stop if we reached the end of the text
-        if i + chunk_size >= len(words):
-            break
+    # First, split by paragraphs
+    paragraphs = re.split(r'\n\n+', text)
+    
+    for paragraph in paragraphs:
+        paragraph = paragraph.strip()
+        if not paragraph:
+            continue
             
+        # If the paragraph is already small enough, just add it
+        if len(current_chunk) + len(paragraph) <= max_chars:
+            current_chunk += paragraph + "\n\n"
+        else:
+            # If current_chunk is full, save it and start fresh
+            if current_chunk.strip():
+                chunks.append(current_chunk.strip())
+            current_chunk = ""
+            
+            # If the paragraph itself is huge, split it by sentences
+            if len(paragraph) > max_chars:
+                sentences = re.split(r'(?<=[.!?])\s+', paragraph)
+                for sentence in sentences:
+                    if len(current_chunk) + len(sentence) <= max_chars:
+                        current_chunk += sentence + " "
+                    else:
+                        if current_chunk.strip():
+                            chunks.append(current_chunk.strip())
+                        current_chunk = sentence + " "
+            else:
+                current_chunk = paragraph + "\n\n"
+                
+    if current_chunk.strip():
+        chunks.append(current_chunk.strip())
+        
     return chunks
 
 def extract_text_from_pdf(file_path):
@@ -97,8 +126,8 @@ def process_file(file_path, doc_type):
         
     file_chunks = []
     for page in pages:
-        # Chunk text on a page/slide basis
-        raw_chunks = chunk_text_by_words(page["text"])
+        # Chunk text semantically on a page/slide basis
+        raw_chunks = chunk_text_semantically(page["text"])
         for chunk_idx, chunk in enumerate(raw_chunks):
             metadata = {
                 "source": file_name,
@@ -119,13 +148,17 @@ def ingest_documents():
     # 1. Initialize ChromaDB client
     chroma_client = chromadb.PersistentClient(path=DB_DIR)
     
+    openai_ef = get_openai_ef()
+    
     # Get or create the vector collection
     # Note: If the collection exists, we reuse it.
-    collection = chroma_client.get_or_create_collection(name=COLLECTION_NAME)
+    collection = chroma_client.get_or_create_collection(
+        name=COLLECTION_NAME,
+        embedding_function=openai_ef
+    )
     
-    # 2. Load the embedding model and pre-download the reranker so it is
+    # 2. Pre-download the reranker so it is
     #    cached on disk before the UI is ever launched.
-    embedding_model = load_embedding_model()
     print(f"Pre-downloading/caching reranker model '{RERANK_MODEL_NAME}'...")
     CrossEncoder(RERANK_MODEL_NAME)
     print("Reranker model cached successfully.")
@@ -159,17 +192,13 @@ def ingest_documents():
         for c in all_chunks
     ]
     
-    print("Generating embeddings...")
-    embeddings = embedding_model.encode(documents, show_progress_bar=True).tolist()
-    
-    print("Writing embeddings and metadata to ChromaDB...")
+    print(f"Generating embeddings and writing to ChromaDB using {EMBEDDING_MODEL_NAME}...")
     # Add to ChromaDB in batches to prevent payload limits
     batch_size = 100
     for i in range(0, len(all_chunks), batch_size):
         end_idx = min(i + batch_size, len(all_chunks))
         collection.add(
             ids=ids[i:end_idx],
-            embeddings=embeddings[i:end_idx],
             documents=documents[i:end_idx],
             metadatas=metadatas[i:end_idx]
         )
