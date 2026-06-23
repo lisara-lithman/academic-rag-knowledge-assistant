@@ -22,22 +22,20 @@ _llm_client = None
 _llm_provider = None
 
 
-from openai import OpenAI
-
 def get_llm_client():
-    """Initialize the LLM client (OpenAI)."""
+    """Initialize the LLM client."""
     global _llm_client, _llm_provider
     if _llm_client is not None:
         return _llm_client, _llm_provider
 
-    openai_key = os.getenv("OPENAI_API_KEY")
+    groq_key = os.getenv("GROQ_API_KEY")
 
-    if openai_key:
-        print("Using OpenAI API for LLM reasoning...")
-        _llm_client = OpenAI(api_key=openai_key)
-        _llm_provider = "openai"
+    if groq_key:
+        print("Using Groq API for LLM reasoning...")
+        _llm_client = Groq(api_key=groq_key)
+        _llm_provider = "groq"
     else:
-        raise ValueError("OPENAI_API_KEY not found in .env!")
+        raise ValueError("GROQ_API_KEY not found in .env!")
 
     return _llm_client, _llm_provider
 
@@ -65,27 +63,6 @@ def load_rerank_model():
         _rerank_model = CrossEncoder(RERANK_MODEL_NAME)
     return _rerank_model
 
-
-def _is_retryable_error(e):
-    err_str = str(e).lower()
-    return any(x in err_str for x in ["429", "rate limit", "quota", "timeout", "connection", "500", "502", "503", "504"])
-
-
-def call_with_retry(func, max_retries=3, initial_backoff=2):
-    """Executes a function with exponential backoff if a rate limit error is encountered."""
-    retries = 0
-    backoff = initial_backoff
-    while True:
-        try:
-            return func()
-        except Exception as e:
-            if _is_retryable_error(e) and retries < max_retries:
-                print(f"Network/API error hit ({e}). Retrying in {backoff} seconds...")
-                time.sleep(backoff)
-                retries += 1
-                backoff *= 2
-            else:
-                raise e
 
 
 def rewrite_query(query, history=None):
@@ -130,15 +107,15 @@ def rewrite_query(query, history=None):
 
     try:
         def _call_llm():
-            if provider == "openai":
+            if provider == "groq":
                 completion = client.chat.completions.create(
-                    model="gpt-4o",
+                    model="llama-3.1-8b-instant",
                     messages=[{"role": "user", "content": prompt}],
                     temperature=0.0
                 )
                 return completion.choices[0].message.content.strip()
 
-        response_text = call_with_retry(_call_llm)
+        response_text = _call_llm()
 
         # Parse decision, query and optional chat response
         decision = "SEARCH"
@@ -196,7 +173,7 @@ def retrieve_chunks(query, n_results=5):
         embedding_function=openai_ef
     )
 
-    # 2. Query ChromaDB directly with text (Chroma handles embedding via openai_ef)
+    # 2. Query ChromaDB — internally calls OpenAI embeddings API.
     results = collection.query(
         query_texts=[query],
         n_results=n_results,

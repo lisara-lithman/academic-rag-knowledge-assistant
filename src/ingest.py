@@ -10,7 +10,7 @@ from sentence_transformers import CrossEncoder
 load_dotenv()
 
 # Configuration
-KNOWLEDGE_BASE_DIR = "knowledge_base/operating_systems"
+KNOWLEDGE_BASE_DIR = "data/knowledge_base/operating_systems"
 DB_DIR = os.getenv("PERSIST_DIRECTORY", "./vector_db")
 COLLECTION_NAME = "operating_systems"
 EMBEDDING_MODEL_NAME = "text-embedding-3-large"
