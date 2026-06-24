@@ -229,4 +229,5 @@ Open `http://localhost:5173`.
 
 ## License
 
-Built for educational use and portfolio demonstration.
+Built for educational use 
+
