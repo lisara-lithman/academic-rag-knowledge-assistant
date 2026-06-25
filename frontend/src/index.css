@@ -1,0 +1,120 @@
+/* frontend/src/index.css */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+  /* ── Parchment Palette ── */
+  --bg-primary:    #f4efe6;
+  --bg-secondary:  #ede8dc;
+  --bg-card:       #fffcf7;
+  --bg-input:      #ffffff;
+
+  /* ── Borders ── */
+  --border:        rgba(139, 115, 85, 0.18);
+  --border-hover:  rgba(30, 58, 95, 0.35);
+
+  /* ── Ink Text ── */
+  --text-primary:  #1a1208;
+  --text-muted:    #8b7355;
+  --text-dim:      #6b5a44;
+
+  /* ── Navy Accent (primary) ── */
+  --accent:        #1e3a5f;
+  --accent-mid:    #2d5282;
+  --accent-bright: #3b6cb7;
+  --accent-glow:   rgba(30, 58, 95, 0.12);
+  --accent-soft:   rgba(30, 58, 95, 0.07);
+
+  /* ── Gold Accent (secondary) ── */
+  --gold:          #c9820a;
+  --gold-bright:   #e8a046;
+  --gold-soft:     rgba(201, 130, 10, 0.1);
+  --gold-border:   rgba(201, 130, 10, 0.3);
+
+  /* ── User bubble ── */
+  --user-bg: linear-gradient(135deg, #1e3a5f 0%, #152c48 100%);
+
+  /* ── Success ── */
+  --success:       #2d6a4f;
+  --success-soft:  rgba(45, 106, 79, 0.1);
+
+  /* ── Shadows ── */
+  --shadow-card: 0 2px 12px rgba(90, 60, 20, 0.10), 0 1px 3px rgba(90, 60, 20, 0.06);
+  --shadow-lift: 0 8px 24px rgba(90, 60, 20, 0.14);
+
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg-primary);
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar        { width: 5px; }
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  { background: rgba(139, 115, 85, 0.3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* ── Markdown inside bot messages ── */
+.markdown h1, .markdown h2, .markdown h3 {
+  color: var(--accent);
+  font-family: 'Playfair Display', Georgia, serif;
+  margin: 14px 0 6px;
+  letter-spacing: -0.2px;
+}
+.markdown p   { margin-bottom: 10px; line-height: 1.65; }
+.markdown ul, .markdown ol { margin: 8px 0 8px 20px; }
+.markdown li  { margin-bottom: 5px; }
+.markdown code {
+  background: var(--gold-soft);
+  color: var(--gold);
+  border: 1px solid var(--gold-border);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.83em;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+}
+.markdown pre {
+  background: #f8f4ed;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
+  border-radius: 6px;
+  padding: 14px 16px;
+  overflow-x: auto;
+  margin: 10px 0;
+}
+.markdown pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--text-primary);
+  font-size: 0.88em;
+}
+.markdown strong { color: var(--accent); font-weight: 600; }
+.markdown em     { color: var(--text-dim); font-style: italic; }
+.markdown blockquote {
+  border-left: 3px solid var(--gold);
+  padding: 6px 14px;
+  color: var(--text-muted);
+  background: var(--gold-soft);
+  border-radius: 0 6px 6px 0;
+  margin: 10px 0;
+}
+.markdown a { color: var(--accent-bright); text-decoration: underline; }

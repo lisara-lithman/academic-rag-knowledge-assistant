@@ -54,8 +54,10 @@ def stream_grounded_answer(query, context_chunks, history=None, is_refinement=Fa
         "You are an expert AI tutor for a university 'Operating Systems and System Administration' (OSSA) module. "
         "Your task is to answer the student's question clearly, accurately, and pedagogically.\n\n"
         "RULES:\n"
-        "- Base your answer heavily on the provided Context Materials. "
-        "- If the Context Materials are insufficient, you may use your internal knowledge of OS concepts to supplement the answer, but keep it accurate to standard university curricula.\n"
+        "- Base your answer STRICTLY on the provided Context Materials. "
+        "- If the Context Materials do not contain enough information to answer the question, explicitly say: "
+        "'The provided lecture materials do not contain sufficient information on this topic.'\n"
+        "- Do NOT use outside knowledge or answer from memory — only use what is in the Context Materials.\n"
         "- Use markdown formatting (bolding, lists, code blocks) to make your explanation readable.\n"
         "- Keep it concise unless a detailed explanation is requested."
     )
@@ -68,7 +70,7 @@ def stream_grounded_answer(query, context_chunks, history=None, is_refinement=Fa
     user_prompt = (
         f"Context Materials:\n{context_text}\n\n"
         f"Student Question: \"{query}\"\n"
-        "Answer directly and concisely, prioritizing the context materials but using outside knowledge if necessary."
+        "Answer directly and concisely based strictly on the context materials provided above."
     )
 
     if provider == "groq":
@@ -115,8 +117,8 @@ async def chat_endpoint(req: ChatRequest):
         yield f"data: {meta_event}\n\n"
         
         # 2. Stream Response
-        if decision == "CHAT":
-            # Just stream the whole chat_response as one token for simplicity
+        if decision in ["CHAT", "OUT_OF_SCOPE"]:
+            # Stream the router's canned response directly
             token_event = json.dumps({"type": "token", "content": chat_response})
             yield f"data: {token_event}\n\n"
         else:
